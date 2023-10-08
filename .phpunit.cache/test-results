@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"UserControllerTest::testInsert":0.277,"UserControllerTest::testSelectByEmail":0.006,"UserControllerTest::testUpdate":0.013,"UserControllerTest::testDelete":0.005}}
