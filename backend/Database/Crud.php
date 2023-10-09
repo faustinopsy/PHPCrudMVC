@@ -19,7 +19,11 @@ class Crud extends Connection{
         $data = [];
         foreach ($properties as $property) {
             $property->setAccessible(true); 
+            if ($property->getName() === 'id') { 
+                continue;
+            }
             $data[$property->getName()] = $property->getValue($object);
+           
         }
         $columns = implode(", ", array_keys($data));
         $placeholders = ":" . implode(", :", array_keys($data));
@@ -54,6 +58,9 @@ class Crud extends Connection{
         $data = [];
         foreach ($properties as $property) {
             $property->setAccessible(true);
+            if ($property->getName() === 'id') { 
+                continue;
+            }
             $data[$property->getName()] = $property->getValue($object);
         }
         $dataStr = implode(", ", array_map(function($item) {

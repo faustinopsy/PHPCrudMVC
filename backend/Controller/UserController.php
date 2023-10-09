@@ -19,12 +19,16 @@ class UserController extends Crud{
     public function buscarEmail($email) {
        return $this->select($this->table,['email' => $email]);
     }
-    public function atualizar($id) {
-        return $this->update($this->table ,['id'=>$id]);
-    }
+    public function buscarid($id) {
+        return $this->select($this->table,['id' => $id]);
+     }
     public function atualizarEmail($email) {
         return $this->update($this->table ,['email' => $email]);
-    }    public function excluir($id) {
+    }   
+    public function atualizarId($id) {
+        return $this->update($this->table ,['id' => $id]);
+    }   
+     public function excluir($id) {
         return $this->delete($this->table ,['id'=>$id]);
     }
 }

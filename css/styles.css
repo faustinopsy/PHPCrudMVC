@@ -1,0 +1,78 @@
+body {
+    background-image: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button, a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    width: 400px; /* Ajuste a largura conforme necessário */
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Espaço entre os elementos dentro do cartão */
+}
+
+textarea {
+    width: 100%; /* Ocupa toda a largura do cartão */
+    height: 150px; /* Ajuste a altura conforme necessário */
+    resize: none; /* Evita que o usuário redimensione a área de texto */
+    border-radius: 5px;
+    padding: 10px;
+}
+
+div {
+    display: flex; /* Coloca os elementos lado a lado */
+    gap: 10px; /* Espaço entre o input e o botão */
+    width: 100%; /* Ocupa toda a largura do cartão */
+}
+
+input {
+    flex: 1; /* Ocupa todo o espaço disponível */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    border-radius: 5px;
+}
+a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}

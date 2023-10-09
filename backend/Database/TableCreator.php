@@ -1,17 +1,18 @@
 <?php
 namespace App\Database;
 
+use App\Database\Connection;
 use Exception;
 use PDOException;
+use PDO;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 
 class TableCreator extends Connection{
-    protected $conn;
 
-    public function __construct(Connection $connection) {
-        $this->conn = $connection;
+    public function __construct() {
+        parent::__construct();
     }
 
     private function mapPhpTypeToSqlType($type) {
@@ -37,19 +38,19 @@ class TableCreator extends Connection{
             $properties = $reflection->getProperties(ReflectionProperty::IS_PRIVATE);
             $columns = [];
             $columnNames = [];  
-        foreach ($properties as $property) {
-            $columnName = $property->getName();
-            $type = $property->getType()->getName();
-            if (!$type) {
-                continue; 
+            foreach ($properties as $property) {
+                $columnName = $property->getName();
+                $type = $property->getType()->getName();
+                if (!$type) {
+                    continue; 
+                }
+                $sqlType = $this->mapPhpTypeToSqlType($type);
+                $columns[] = "{$columnName} {$sqlType}";
+                $columnNames[] = $columnName;
             }
-            $sqlType = $this->mapPhpTypeToSqlType($type);
-            $columns[] = "{$columnName} {$sqlType}";
-            $columnNames[] = $columnName;
-        }
     
         $tableName = str_replace('App','',str_replace('Model','',str_replace('\\','',$reflection->getName())));
-        
+
         $columnsSql = implode(', ', $columns);
         $createTableSql = "CREATE TABLE IF NOT EXISTS {$tableName} (".str_replace('id INT,','id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,',$columnsSql).")";
         $stmt = $this->conn->prepare($createTableSql);
@@ -62,6 +63,7 @@ class TableCreator extends Connection{
         $this->createDeleteProcedure($tableName);
         $this->createSelectAllProcedure($tableName);
         $this->createSelectByIdProcedure($tableName);
+        return true;
     } catch (ReflectionException $e) {
         echo "Erro de Reflexão: " . $e->getMessage();
     } catch (PDOException $e) {
@@ -69,6 +71,7 @@ class TableCreator extends Connection{
     } catch (Exception $e) {
         echo "Erro: " . $e->getMessage();
     }
+    return false;
     }
     
     private function createInsertProcedure($tableName, $columnNames, $placeholders) {

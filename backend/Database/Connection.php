@@ -21,7 +21,7 @@ use PDOException;
         $this->db_type = $config['db']['db_type'];
         $this->connect();
     }
- private function connect() {
+ public function connect() {
   try {
     switch ($this->db_type) {
         case "mysql":
@@ -31,8 +31,8 @@ use PDOException;
             $dsn = "pgsql:host=" . $this->host . ";dbname=" . $this->db_name;
             break;
         case "sqlite":
-            $dsn = "sqlite:" . "sqlite/test_drive.db";
-            $filepath =  "sqlite/test_drive.db";
+            $dsn = "sqlite:". __DIR__ . "/../sqlite/test_drive.db";
+            $filepath = __DIR__ . "/../sqlite/test_drive.db";
             if (!file_exists($filepath)) {
                 die("Arquivo não encontrado: $filepath");
             }

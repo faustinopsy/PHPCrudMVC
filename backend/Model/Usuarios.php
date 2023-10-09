@@ -2,7 +2,7 @@
 namespace App\Model;
 
 class Usuarios {
-    protected int $id;
+    private int $id;
     private string $nome;
     private string $email;
     private string $senha;
@@ -75,7 +75,7 @@ class Usuarios {
      */
     public function setSenha($senha): self
     {
-        $this->senha = $senha;
+        $this->senha = password_hash($senha, PASSWORD_DEFAULT);
 
         return $this;
     }

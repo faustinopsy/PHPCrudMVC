@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Gerenciamento de Usuários</title>
+</head>
+<body>
+
+    <div class="card">
+        <form id="userForm">
+            <a href="../">Voltar</a>
+            <h3>Buscar Usuário</h3>
+            <label for="getUserId">ID do Usuário:</label>
+            <input type="number" id="getUserId">
+            <button onclick="getUser()">Buscar</button>
+            <h3>Gerenciar Usuário</h3>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome"required>
+            <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="ssenha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+            <button id="atualizar">Atualizar</button>
+            <button id="excluir">Excluir</button>
+        </form>
+</div>
+
+<script src="js/getUser.js"></script>
+<script src="js/updateUser.js"></script>
+<script src="js/deleteUser.js"></script>
+</body>
+</html>

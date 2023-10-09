@@ -17,11 +17,14 @@ class UserControllerTest extends TestCase
 
     public function testInsert()
     {
+        $this->user->setId(1);
         $this->user->setNome("Test User");
         $this->user->setEmail("test@example.com");
         $this->user->setSenha("Test1234");
 
         $this->assertTrue($this->userController->inserir());
+        $result = $this->userController->getLastInsertId();
+        $this->assertNotEmpty($result);
     }
 
     public function testSelectByEmail()
@@ -33,9 +36,18 @@ class UserControllerTest extends TestCase
         $this->assertNotEmpty($result);
         $this->assertEquals($email, $result[0]['email'] ?? null);
     }
+    public function testSelect()
+    {
+        $email = "aaaaagohipnose@gmail.com";
+
+        $result = $this->userController->buscarTodos();
+        $this->assertNotEmpty($result);
+        $this->assertEquals($email, $result[0]['email'] ?? null);
+    }
 
     public function testUpdate()
     {
+        $this->user->setId(1);
         $this->user->setNome("Usuario atualizado");
         $this->user->setEmail("updatedxxx@example.com");
         $this->user->setSenha("Updated1234");
