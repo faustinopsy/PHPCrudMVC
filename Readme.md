@@ -45,11 +45,11 @@ UserController é uma classe exemplo que estende Crud, oferecendo funcionalidade
 
 
 ## Pré-requisitos
-O que você precisa para instalar o software e como instalá-lo:
+```bash
 PHP >= 8.2
 Composer
 MySQL (ou outro SGBD compatível com PDO)
-
+```
 ## Testes
 O MicroFramework agora vem com testes unitários, garantindo que as funcionalidades principais estejam funcionando conforme esperado e facilitando a identificação e correção de bugs durante o desenvolvimento. Os testes foram escritos utilizando PHPUnit e cobrem operações básicas de CRUD.
 
