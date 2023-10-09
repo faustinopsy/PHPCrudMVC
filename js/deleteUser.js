@@ -41,8 +41,17 @@ document.getElementById('excluir').addEventListener('click', function(e) {
 
     const data = response.json();
 
-        alert("Usuário excluido: " + JSON.stringify(data));
+    Swal.fire(
+        'Usuário excluido com sucesso',
+        '',
+        'success'
+      )
     } catch (error) {
-        alert('Erro na requisição: ' + error.message);
+        Swal.fire(
+            error.mensagem,
+            '',
+            'info'
+          )
+        
     }
 });

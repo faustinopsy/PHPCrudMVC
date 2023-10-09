@@ -38,10 +38,18 @@ async function getUser() {
     }
 
     const data = await response.json();
-
-        document.getElementById("nome").value = data.usuarios[0].nome; 
-        document.getElementById("email").value = data.usuarios[0].email; 
-        document.getElementById("senha").value = data.usuarios[0].senha; 
+        if(data.status){
+            document.getElementById("nome").value = data.usuarios[0].nome; 
+            document.getElementById("email").value = data.usuarios[0].email; 
+            document.getElementById("senha").value = data.usuarios[0].senha; 
+        }else{
+            Swal.fire(
+                data.mensagem,
+                '',
+                'info'
+              )
+        }
+       
     } catch (error) {
         alert('Erro na requisição: ' + error.message);
     }

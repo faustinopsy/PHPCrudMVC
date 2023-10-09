@@ -57,10 +57,20 @@ for (let i = 0; i < form.elements.length; i++) {
         }
 
         const data = await response.json();
-
-            alert("Usuário criado: " + JSON.stringify(data));
+        Swal.fire(
+            'Usuário criado com sucesso',
+            '',
+            'success'
+          )
+          document.getElementById("nome").value = ''; 
+          document.getElementById("email").value = ''; 
+          document.getElementById("senha").value = ''; 
         } catch (error) {
-            alert('Erro na requisição: ' + error.message);
+            Swal.fire(
+                error.message,
+                '',
+                'info'
+              )
         }
         
     }

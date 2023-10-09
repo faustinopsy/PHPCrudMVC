@@ -53,9 +53,18 @@ for (let i = 0; i < form.elements.length; i++) {
 
     const data = await response.json();
 
-        alert("Usuário atualizado: " + JSON.stringify(data));
+    Swal.fire(
+        'Usuário atualizado com sucesso',
+        '',
+        'success'
+      )
     } catch (error) {
         alert('Erro na requisição: ' + error.message);
+        Swal.fire(
+            error.message,
+            '',
+            'info'
+          )
     }
 }
 atualizar()

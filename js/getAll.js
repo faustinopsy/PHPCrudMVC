@@ -43,7 +43,11 @@ async function getAll() {
         if(data.status){
             displayUsers(data);
         }else{
-            alert(data.mensagem);
+            Swal.fire(
+                data.mensagem,
+                '',
+                'info'
+              )
         }
        
     } catch (error) {
