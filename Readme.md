@@ -26,6 +26,7 @@ O projeto é estruturado de maneira clara e concisa, facilitando a compreensão 
 - **backend/Database/TableCreate**: é a classe responsável por criar as tabelas no banco de dados quando ela recebe a classe model correspondente e cria também os store procedure para a classe.
     - **exemplo de uso do ORM (Mapeamento obejeto relacional)** : 
     o exemplo abaixo mostra que a oser  executado é criado uma tabela no banco de dados respeitando a estrutura da classe, desde que a classe siga o modelo de propriedades privadas e tipagem estatica como a classe usuarios que esta no diretório Model.
+    para usar foi criado um arquivo chamado migrate.php na raiz do projeto que ao ser chamado irá criar as tabelas e as procedures
    ```bash
 
     use App\Database\TableCreator;

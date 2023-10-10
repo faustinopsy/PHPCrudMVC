@@ -7,5 +7,9 @@ use App\Model\Usuarios;
 
 $table = new TableCreator();
 $user = new Usuarios();
-$table->createTableFromModel($user);
+if($table->createTableFromModel($user)){
+    echo "Tabela(S) criadas com sucesso";
+}else{
+    echo "Erro ao criar tabelas";
+}
 
