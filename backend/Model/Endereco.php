@@ -10,6 +10,20 @@ private string $cidade;
 private string $uf;
 private int $userid;
 public function __construct() {}
+public function getId()
+{
+return $this->id;
+}
+
+/**
+ * Set the value of rua
+ */
+public function setId($id): self
+{
+$this->id = $id;
+
+return $this;
+}
 /**
  * Get the value of cep
  */

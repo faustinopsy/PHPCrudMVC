@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 use App\Model\Produto;
-
 class ProdutoTest extends TestCase
 {
     public function testSetAndGetId()
@@ -16,6 +15,7 @@ class ProdutoTest extends TestCase
     public function testSetAndGetNome()
     {
         $produto = new Produto();
+        $produto->setId(1);
         $nome = 'Produto Exemplo';
         $produto->setNome($nome);
         $this->assertEquals($nome, $produto->getNome());
@@ -24,8 +24,7 @@ class ProdutoTest extends TestCase
     public function testSetAndGetPreco()
     {
         $produto = new Produto();
-        $nome = 'Produto Exemplo';
-        $produto->setNome($nome);
+        $produto->setId(1);
         $preco = 19.99;
         $produto->setPreco($preco);
         $this->assertEquals($preco, $produto->getPreco());
@@ -34,6 +33,7 @@ class ProdutoTest extends TestCase
     public function testSetAndGetQuantidade()
     {
         $produto = new Produto();
+        $produto->setId(1);
         $nome = 'Produto Exemplo';
         $produto->setNome($nome);
         $preco = 19.99;

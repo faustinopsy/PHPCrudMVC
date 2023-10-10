@@ -25,7 +25,7 @@ class RouterTest extends TestCase
     public function testGetUsuarioPorId()
     {
         $requestMethod = 'GET';
-        $userId = 4; 
+        $userId = 27; 
         $uri = "/backend/usuario/{$userId}";
     
         $router = new \App\Router($requestMethod, $uri);
@@ -43,7 +43,7 @@ class RouterTest extends TestCase
     public function testGetUsuarioPorIdSucesso()
     {
         $requestMethod = 'GET';
-        $userId = 2; 
+        $userId = 16; 
         $uri = "/backend/usuario/{$userId}";
     
         $router = new \App\Router($requestMethod, $uri);
@@ -58,5 +58,7 @@ class RouterTest extends TestCase
         $this->assertEquals("Usuários recuperados com sucesso", $responseData['mensagem']);
         $this->assertIsArray($responseData['usuarios']);
     }
+  
+
     
 }

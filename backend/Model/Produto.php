@@ -11,11 +11,9 @@ class Produto {
     public function getId() {
         return $this->id;
     }
-
     public function setId($id) {
         $this->id = $id;
     }
-
     public function getNome() {
         return $this->nome;
     }
@@ -23,7 +21,7 @@ class Produto {
         $this->nome = $nome;
     }
     public function getPreco() {
-        return $this->nome;
+        return $this->preco;
     }
     public function setPreco($preco) {
         $this->preco = $preco;
