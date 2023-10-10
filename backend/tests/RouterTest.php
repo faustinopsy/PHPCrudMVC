@@ -25,7 +25,7 @@ class RouterTest extends TestCase
     public function testGetUsuarioPorId()
     {
         $requestMethod = 'GET';
-        $userId = 2; 
+        $userId = 4; 
         $uri = "/backend/usuario/{$userId}";
     
         $router = new \App\Router($requestMethod, $uri);
@@ -43,7 +43,7 @@ class RouterTest extends TestCase
     public function testGetUsuarioPorIdSucesso()
     {
         $requestMethod = 'GET';
-        $userId = 68; 
+        $userId = 2; 
         $uri = "/backend/usuario/{$userId}";
     
         $router = new \App\Router($requestMethod, $uri);
