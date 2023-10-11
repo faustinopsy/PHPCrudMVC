@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Controller\UserController;
+use App\Controller\UsuariosController;
 use App\Model\Usuarios;
 
 class Router {
@@ -58,7 +58,7 @@ class Router {
         $this->rotas = [
             'GET' => [
                 '/backend/usuario' => function() {
-                    $this->usercontroller = new UserController($this->user);
+                    $this->usercontroller = new UsuariosController($this->user);
                     $usuarios= $this->usercontroller->buscarTodos();
                     if(!$usuarios){
                         $data = [
@@ -80,7 +80,7 @@ class Router {
                     
                 },
                 '/backend/usuario/{id}' => function($id) {
-                    $this->usercontroller = new UserController($this->user);
+                    $this->usercontroller = new UsuariosController($this->user);
                     $usuarios= $this->usercontroller->buscarid($id);
                     if(!$usuarios){
                         $data = [
@@ -106,7 +106,7 @@ class Router {
                     $this->user->setNome($body['nome']);
                     $this->user->setEmail($body['email']);
                     $this->user->setSenha($body['senha']);
-                    $this->usercontroller = new UserController($this->user);
+                    $this->usercontroller = new UsuariosController($this->user);
                     $usuario = $this->usercontroller->inserir();
                     if(!$usuario){
                         $data = [
@@ -132,7 +132,7 @@ class Router {
                     $this->user->setNome($data['nome']);
                     $this->user->setEmail($data['email']);
                     $this->user->setSenha($data['senha']);
-                    $this->usercontroller = new UserController($this->user);
+                    $this->usercontroller = new UsuariosController($this->user);
                     $result= $this->usercontroller->atualizarId($id);
                     if($result){
                         return json_decode(json_encode($data,true));
@@ -143,7 +143,7 @@ class Router {
             ],
             'DELETE' => [
                 '/backend/usuario/{id}' => function($id) {
-                    $this->usercontroller = new UserController($this->user);
+                    $this->usercontroller = new UsuariosController($this->user);
                     $success= $this->usercontroller->excluir($id);
                     if ($success) {
                         $data = [

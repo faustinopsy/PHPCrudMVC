@@ -1,11 +1,6 @@
 <?php
-return [
-    'db' => [
-        'host' => 'localhost',
-        'name' => 'aulax',
-        'user' => 'root',
-        'pass' => 'root123',
-        'db_type' => 'mysql', // Opções: "mysql", "pgsql", "sqlite", "mssql"
-    ],
-    
-];
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'aulax');
+define('DB_USER', 'root');
+define('DB_PASSWORD', 'root123');
+define('DB_TYPE', 'mysql');

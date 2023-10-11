@@ -4,7 +4,6 @@ namespace App\Database;
 use App\Database\Connection;
 use Exception;
 use PDOException;
-use PDO;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
@@ -73,6 +72,169 @@ class TableCreator extends Connection{
     }
     return false;
     }
+    public function createController($model){
+        $reflection = new ReflectionClass($model);
+        $className= $reflection->getShortName();
+        $controllerTemplate = <<<EOT
+            <?php
+
+            namespace App\Controller;
+
+            use App\Database\Crud;
+
+            class {{className}}Controller extends Crud{
+                protected \$table;
+                public function __construct(\$classe) {
+                    parent::__construct();
+                    \$this->table = \$classe;
+                }
+                public function inserir() {
+                    return \$this->insert(\$this->table);
+                }
+                public function buscarTodos() {
+                    return \$this->select(\$this->table,[]);
+                 }
+                 public function buscarId(\$id) {
+                    return \$this->select(\$this->table,['id' => \$id]);
+                 }
+                 public function atualizarId(\$id) {
+                    return \$this->update(\$this->table ,['id' => \$id]);
+                 }  
+                public function excluir(\$id) {
+                    return \$this->delete(\$this->table ,['id'=>\$id]);
+                }
+            }
+            EOT;
+
+            $generatedController = str_replace(
+                ['{{className}}'],
+                [$className],
+                $controllerTemplate
+            );
+            file_put_contents('backend/Controller/'.$className.'Controller.php', $generatedController);
+    }
+    public function createTests($model){
+        $reflection = new ReflectionClass($model);
+        $className = $reflection->getShortName();
+        
+        $controllerTestTemplate = <<<EOT
+            <?php
+
+            use App\Controller\{{className}}Controller;
+            use App\Model\{{className}};
+            use PHPUnit\Framework\TestCase;
+            
+            class {{className}}ControllerTest extends TestCase {
+                protected \$controller;
+                protected \$model;
+            
+                protected function setUp(): void {
+                    \$this->model = new {{className}}();
+                    \$this->controller = new {{className}}Controller(\$this->model);
+                }
+            
+                public function testInsert() {
+                    \$reflection = new ReflectionClass(\$this->model);
+                    \$properties = \$reflection->getProperties(ReflectionProperty::IS_PRIVATE);
+            
+                    foreach (\$properties as \$property) {
+                        \$propName = \$property->getName();
+                        \$setterMethod = 'set' . ucfirst(\$propName);
+                        
+                        if (method_exists(\$this->model, \$setterMethod)) {
+                            \$type = \$property->getType()->getName();
+                            
+                            switch(\$type) {
+                                case 'int':
+                                    \$testValue = 1;
+                                    break;
+                                case 'string':
+                                    \$testValue = 'TestValue';
+                                    break;
+                                case 'DateTime':
+                                    \$testValue = new \DateTime();
+                                    break;
+                                default:
+                                    \$testValue = 'TestValue';
+                            }
+                            
+                            \$this->model->\$setterMethod(\$testValue); 
+                        }
+                    }
+                    
+            
+                    \$this->assertTrue(\$this->controller->inserir());
+            
+                   \$lastInsertId = \$this->controller->getLastInsertId();
+                    \$this->assertIsNumeric(\$lastInsertId);
+                }
+            
+                public function testSelectAll() {
+                    \$result = \$this->controller->buscarTodos();
+                    
+                    \$this->assertIsArray(\$result);
+                    \$this->assertNotEmpty(\$result);
+                }
+            
+                public function testSelectById() {
+                    \$id = 1;
+            
+                    \$result = \$this->controller->buscarId(\$id);
+                    
+                    \$this->assertIsArray(\$result);
+                    \$this->assertNotEmpty(\$result);
+                }
+            
+                public function testUpdate() {
+                    \$id = 1;
+                    \$newData = [
+                        'prop1' => 'NewValue1',
+                        'prop2' => 'NewValue2',
+                    ];
+                    \$this->assertTrue(\$this->controller->atualizarId(\$id));
+                }
+            
+                public function testDelete() {
+                    \$id = 1;
+    
+                    \$this->assertTrue(\$this->controller->excluir(\$id));
+                }
+            }
+            
+            EOT;
+        
+        $generatedControllerTest = str_replace(
+            ['{{className}}'],
+            [$className],
+            $controllerTestTemplate
+        );
+        file_put_contents('backend/tests/'.$className.'ControllerTest.php', $generatedControllerTest);
+        
+
+        $modelTestTemplate = <<<EOT
+            <?php
+    
+            use App\Model\{{className}};
+            use PHPUnit\Framework\TestCase;
+    
+            class {{className}}Test extends TestCase {
+                public function testSetAndGet() {
+                    \$model = new {{className}}();
+                    // Adicione lógica de teste para setters e getters
+                }
+    
+                // Adicione mais métodos de teste conforme necessário...
+            }
+            EOT;
+        
+        $generatedModelTest = str_replace(
+            ['{{className}}'],
+            [$className],
+            $modelTestTemplate
+        );
+        file_put_contents('backend/tests/'.$className.'Test.php', $generatedModelTest);
+    }
+    
     
     private function createInsertProcedure($tableName, $columnNames, $placeholders) {
         $columnNamesWithoutId = array_filter($columnNames, function($colName) {

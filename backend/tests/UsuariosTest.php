@@ -6,12 +6,10 @@ use PHPUnit\Framework\TestCase;
 class UsuariosTest extends TestCase
 {
     protected $usuario;
-
     protected function setUp(): void
     {
         $this->usuario = new Usuarios();
     }
-
     public function testSetAndGetId()
     {
         $id = 1;

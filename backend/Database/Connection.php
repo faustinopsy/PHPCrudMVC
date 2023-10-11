@@ -14,11 +14,12 @@ use PDOException;
     public function __construct() {
         $configFilePath = __DIR__ . '/config.php';
         $config = require $configFilePath;
-        $this->host = $config['db']['host'];
-        $this->db_name = $config['db']['name'];
-        $this->username = $config['db']['user'];
-        $this->password = $config['db']['pass'];
-        $this->db_type = $config['db']['db_type'];
+        $this->host = DB_HOST;
+        $this->db_name = DB_NAME;
+        $this->username = DB_USER;
+        $this->password = DB_PASSWORD;
+        $this->db_type = DB_TYPE;
+        
         $this->connect();
     }
  public function connect() {
