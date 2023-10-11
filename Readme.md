@@ -13,6 +13,28 @@ Instale as dependências do Composer
 ```bash
 composer install
 ```
+## Configuração Inicial e Criação de Classes
+
+### Instalação e Configuração Inicial
+O arquivo `install.php` na raiz do projeto facilita a configuração inicial do banco de dados e a criação de classes e tabelas correspondentes. Ao acessar este arquivo, será apresentado um formulário solicitando as credenciais do banco de dados e, em seguida, criará o banco de dados conforme especificado.
+
+### Criação Automática de Classes e Tabelas
+Após a configuração inicial do banco de dados, o `install.php` (lembre-se de não subir para produção nem o install.php nem o migrate.php) também facilita a criação de classes modelo e suas tabelas correspondentes no banco de dados. O usuário pode especificar o nome da classe e suas propriedades (nome e tipo) através de um formulário. Com base nessas informações, o seguinte é gerado automaticamente:
+- **Classe Modelo**: Uma classe PHP no diretório `Backend/Model` que representa um modelo de dados com propriedades e métodos getter e setter.
+- **Controlador**: Um controlador correspondente no diretório `Backend/Controller` que facilita as operações CRUD para o modelo.
+- **Tabela de Banco de Dados**: Uma tabela no banco de dados que corresponde ao modelo, com colunas que representam as propriedades da classe.
+- **Procedures**: Procedures SQL para operações básicas de CRUD relacionadas à tabela criada.
+
+### Geração de Classes JavaScript e Formulários HTML
+Foi descontinuado a criação de javascript e formulários html, mas na raiz encontra-se modelos para realizar uma cópia e reproduzir para as classes correspondentes, e ajustar o caminho para a rota especifica
+
+## Testes Automatizados
+Os testes para as classes modelo e controladores também são gerados automaticamente, garantindo que as operações básicas de CRUD funcionem conforme esperado. Os testes são salvos no diretório `backend/tests` e podem ser executados usando PHPUnit para validar a lógica de negócios e operações de banco de dados.
+De certo que os métodos deveram ser construidos é gerado apenas a base para criar seus proprios testes
+
+## Uso
+Após a configuração inicial e a criação das classes, controladores e tabelas, o MicroFramework está pronto para ser usado. Os desenvolvedores podem criar novas rotas, expandir os controladores existentes e adicionar novas lógicas de negócios conforme necessário, enquanto aproveitam as funcionalidades básicas de roteamento, banco de dados e CRUD fornecidas pelo MicroFramework.
+
 Configure o banco de dados no arquivo config
 Execute os scripts de criação de tabela conforme necessário
 ## Estrutura do Projeto

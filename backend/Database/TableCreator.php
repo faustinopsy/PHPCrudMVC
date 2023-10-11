@@ -220,10 +220,9 @@ class TableCreator extends Connection{
             class {{className}}Test extends TestCase {
                 public function testSetAndGet() {
                     \$model = new {{className}}();
-                    // Adicione lógica de teste para setters e getters
+                   
                 }
     
-                // Adicione mais métodos de teste conforme necessário...
             }
             EOT;
         
