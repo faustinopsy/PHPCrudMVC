@@ -1,10 +1,10 @@
 <?php
+
 namespace App\Controller;
 
 use App\Database\Crud;
 
-class UserController extends Crud{
-    protected $user;
+class UsuariosController extends Crud{
     protected $table;
     public function __construct($classe) {
         parent::__construct();
@@ -16,19 +16,13 @@ class UserController extends Crud{
     public function buscarTodos() {
         return $this->select($this->table,[]);
      }
-    public function buscarEmail($email) {
-       return $this->select($this->table,['email' => $email]);
-    }
-    public function buscarid($id) {
+     public function buscarId($id) {
         return $this->select($this->table,['id' => $id]);
      }
-    public function atualizarEmail($email) {
-        return $this->update($this->table ,['email' => $email]);
-    }   
-    public function atualizarId($id) {
+     public function atualizarId($id) {
         return $this->update($this->table ,['id' => $id]);
-    }   
-     public function excluir($id) {
+     }  
+    public function excluir($id) {
         return $this->delete($this->table ,['id'=>$id]);
     }
 }

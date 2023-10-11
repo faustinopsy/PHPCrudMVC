@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt_BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de classes</title>
-    <style>
+<style>
     .campos-form {
       display: flex;
       align-items: center;
@@ -41,7 +35,7 @@
     font-size: 18px;
   }
 
-  form input[type="text"],select  {
+  form input[type="text"],select, input[type="password"] {
     width: 100%;
     padding: 10px;
     font-size: 18px;
@@ -49,7 +43,7 @@
     border: 1px solid #ccc;
     box-sizing: border-box;
   }
-  form input[type="number"],select {
+  form input[type="number"],select,input[type="password"] {
     width: 100%;
     padding: 10px;
     font-size: 18px;
@@ -211,78 +205,79 @@
 }
 
   </style>
-</head>
-<body>
-    <h1>Criador de classe</h1>
-    <form id="classForm">
-        <label for="className">Nome da Classe:</label>
-        <input type="text" id="className" name="className" required><br><br>
-        <label for="propertyCount">Quantidade de propriedades:</label>
-        <input type="number" id="propertyCount" name="propertyCount" min="1" required><br><br>
-        <div id="properties"></div>
-        <input type="submit" value="Criar Classe">
-    </form>
+<?php
 
-    <script>
-      
-        document.getElementById('propertyCount').addEventListener('input', function(e) {
-            const count = e.target.value;
-            const propertiesDiv = document.getElementById('properties');
-            propertiesDiv.innerHTML = '';
-            propertiesDiv.innerHTML += `
-            <div class="property">
-                <label for="propName0">Nome da Propriedade:</label>
-                <input type="text" id="propName0" name="propName0" value="id" readonly>
-                <label for="propType0">Tipo:</label>
-                <select name="propType0" required>
-                    <option value="int" readonly selected>int</option>
-                </select>
-            </div>
-				<br><br>
-            `;
+if (file_exists('config.php')) {
+    require_once 'config.php';
+		$db_host = DB_HOST;
+        $db_name = DB_NAME;
+        $db_user = DB_USER;
+        $db_password = DB_PASSWORD;
+} else {
+    if (isset($_POST['submit'])) {
+if(!($_POST['db_host']) || !($_POST['db_name']) || !($_POST['db_user'] )
+|| !($_POST['db_password'])){
+ echo "preecha todos os campos";
+ exit;
+}
+        $db_host = isset($_POST['db_host'])? $_POST['db_host']: '';
+        $db_name = isset($_POST['db_name'])? $_POST['db_name'] : '';
+        $db_user = isset($_POST['db_user'])? $_POST['db_user']: '';
+        $db_password = isset($_POST['db_password'])?$_POST['db_password'] :'';
 
-            for(let i = 1; i < count; i++) {
-                propertiesDiv.innerHTML += `
-                <div class="property">
-                    <label for="propName${i}">Nome da Propriedade:</label>
-                    <input type="text" id="propName${i}" name="propName${i}" required>
-                    <label for="propType${i}">Tipo:</label>
-                    <select name="propType${i}" required>
-                        <option value="string">string</option>
-                        <option value="int">int</option>
-                        <option value="float">float</option>
-                        <option value="datetime">datetime</option>
-                        <option value="bool">bool</option>
-                    </select>
-                    </div>
-                    <br><br>
-                `;
+    } else {
+
+echo '<form action="install.php" method="post">';
+echo '<label for="db_host">DB Host:</label>';
+echo '<input type="text" id="db_host" name="db_host"><br><br>';
+echo '<label for="db_name">DB Name:</label>';
+echo '<input type="text" id="db_name" name="db_name"><br><br>';
+echo '<label for="db_user">DB User:</label>';
+echo '<input type="text" id="db_user" name="db_user"><br><br>';
+echo '<label for="db_password">DB Password:</label>';
+echo '<input type="password" id="db_password" name="db_password"><br><br>';
+echo '<input type="submit" value="Continuar" name="submit">';
+echo '</form>';
+}
+}
+
+if(isset($db_host) && isset($db_user)){
+        $conn = mysqli_connect($db_host, $db_user, $db_password);
+        if (!$conn) {
+            die('Erro ao conectar ao banco de dados: ' . mysqli_error($conn));
+        }
+        $db_selected = mysqli_select_db($conn, $db_name);
+        if (!$db_selected) {
+            $sql = 'CREATE DATABASE IF NOT EXISTS ' . $db_name;
+            if (mysqli_query($conn, $sql)) {
+                echo 'Banco de dados ' . $db_name . ' Criado com sucesso';
+				$db_selected = mysqli_select_db($conn, $db_name);
+				if (!$db_selected) {
+					die('Error selecting database: ' . mysqli_error($conn));
+				}
+            } else {
+                die('Erro ao criar o banco de dados: ' . mysqli_error($conn));
             }
-            document.addEventListener('DOMContentLoaded', (event) => {
-            document.getElementById('propType0').addEventListener('change', function(e) {
-                e.target.value = 'int';
-            });
-        });
-        });
-        
-        document.getElementById('classForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
+        }
 
-            fetch('createClass.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Classe e controller e tabela Criadas!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Erro ao criar classe!');
-            });
-        });
-    </script>
-</body>
-</html>
+        $config_file = 'backend/Database/config.php';
+        $config_content = 
+"<?php
+return [
+	'db' => [
+		'host' => '$db_host',
+		'name' => '$db_name',
+		'user' => '$db_user',
+		'pass' => '$db_password',
+		'db_type' => 'mysql',
+	],
+	
+];\n";
+        file_put_contents($config_file, $config_content, LOCK_EX);
+        if (!file_exists($config_file)) {
+            die('Erro ao escrever o arquivo');
+        }
+        header('Location: migrate.php');
+        exit;
+}
+
