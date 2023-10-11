@@ -263,16 +263,13 @@ if(isset($db_host) && isset($db_user)){
         $config_file = 'backend/Database/config.php';
         $config_content = 
 "<?php
-return [
-	'db' => [
-		'host' => '$db_host',
-		'name' => '$db_name',
-		'user' => '$db_user',
-		'pass' => '$db_password',
-		'db_type' => 'mysql',
-	],
+define('DB_HOST', '$db_host');
+define('DB_NAME', '$db_name');
+define('DB_USER', '$db_user');
+define('DB_PASSWORD', '$db_password');
+define('DB_TYPE', 'mysql');
 	
-];\n";
+\n";
         file_put_contents($config_file, $config_content, LOCK_EX);
         if (!file_exists($config_file)) {
             die('Erro ao escrever o arquivo');
