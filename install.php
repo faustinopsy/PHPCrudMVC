@@ -209,7 +209,7 @@
 
 if (file_exists('config.php')) {
     require_once 'config.php';
-		$db_host = DB_HOST;
+		    $db_host = DB_HOST;
         $db_name = DB_NAME;
         $db_user = DB_USER;
         $db_password = DB_PASSWORD;
@@ -242,34 +242,23 @@ echo '</form>';
 }
 
 if(isset($db_host) && isset($db_user)){
-        $conn = mysqli_connect($db_host, $db_user, $db_password);
-        if (!$conn) {
-            die('Erro ao conectar ao banco de dados: ' . mysqli_error($conn));
-        }
-        $db_selected = mysqli_select_db($conn, $db_name);
-        if (!$db_selected) {
-            $sql = 'CREATE DATABASE IF NOT EXISTS ' . $db_name;
-            if (mysqli_query($conn, $sql)) {
-                echo 'Banco de dados ' . $db_name . ' Criado com sucesso';
-				$db_selected = mysqli_select_db($conn, $db_name);
-				if (!$db_selected) {
-					die('Error selecting database: ' . mysqli_error($conn));
-				}
-            } else {
-                die('Erro ao criar o banco de dados: ' . mysqli_error($conn));
-            }
-        }
+  $conn = new PDO("mysql:host=$db_host;", $db_user, $db_password);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $config_file = 'backend/Database/config.php';
-        $config_content = 
-"<?php
-define('DB_HOST', '$db_host');
-define('DB_NAME', '$db_name');
-define('DB_USER', '$db_user');
-define('DB_PASSWORD', '$db_password');
-define('DB_TYPE', 'mysql');
-	
-\n";
+  $sql = "CREATE DATABASE IF NOT EXISTS $db_name";
+  $conn->exec($sql);
+  echo "Banco $db_name Criado";
+
+  $config_file = 'backend/Database/config.php';
+  $config_content = 
+  "<?php
+  define('DB_HOST', '$db_host');
+  define('DB_NAME', '$db_name');
+  define('DB_USER', '$db_user');
+  define('DB_PASSWORD', '$db_password');
+  define('DB_TYPE', 'mysql');
+    
+  \n";
         file_put_contents($config_file, $config_content, LOCK_EX);
         if (!file_exists($config_file)) {
             die('Erro ao escrever o arquivo');

@@ -1,16 +1,16 @@
 <?php
 
-use App\Controller\UsuariosController;
-use App\Model\Usuarios;
+use App\Controller\EnderecoController;
+use App\Model\Endereco;
 use PHPUnit\Framework\TestCase;
 
-class UsuariosControllerTest extends TestCase {
+class EnderecoControllerTest extends TestCase {
     protected $controller;
     protected $model;
 
     protected function setUp(): void {
-        $this->model = new Usuarios();
-        $this->controller = new UsuariosController($this->model);
+        $this->model = new Endereco();
+        $this->controller = new EnderecoController($this->model);
     }
 
     public function testInsert() {

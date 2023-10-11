@@ -2,7 +2,7 @@ document.getElementById('getAllButton').addEventListener('click', getAll);
 
 async function getAll() {
     try {
-        const response = await fetch('/backend/usuario', {
+        const response = await fetch('/backend/Routes/UsuariosRoute.php', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

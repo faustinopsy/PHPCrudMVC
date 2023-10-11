@@ -1,7 +1,7 @@
 async function getUser() {
     const userId = document.getElementById("getUserId").value;
     try {
-        const response = await fetch('/backend/usuario/' + userId, {
+        const response = await fetch('/backend/Routes/UsuariosRoute.php?id=' + userId, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -39,9 +39,9 @@ async function getUser() {
 
     const data = await response.json();
         if(data.status){
-            document.getElementById("nome").value = data.usuarios[0].nome; 
-            document.getElementById("email").value = data.usuarios[0].email; 
-            document.getElementById("senha").value = data.usuarios[0].senha; 
+            document.getElementById("nome").value = data.usuario.nome; 
+            document.getElementById("email").value = data.usuario.email; 
+            document.getElementById("senha").value = data.usuario.senha; 
         }else{
             Swal.fire(
                 data.mensagem,

@@ -2,11 +2,10 @@
 
 namespace App\Model;
 
-class Usuarios {
+class Pessoa {
     private int $id;
     private string $nome;
-    private string $email;
-    private string $senha;
+    private int $idade;
 
     public function getId() {
         return $this->id;
@@ -26,21 +25,12 @@ class Usuarios {
         return $this;
     }
 
-    public function getEmail() {
-        return $this->email;
+    public function getIdade() {
+        return $this->idade;
     }
 
-    public function setEmail(string $email) {
-        $this->email = $email;
-        return $this;
-    }
-
-    public function getSenha() {
-        return $this->senha;
-    }
-
-    public function setSenha(string $senha) {
-        $this->senha = $senha;
+    public function setIdade(int $idade) {
+        $this->idade = $idade;
         return $this;
     }
 }

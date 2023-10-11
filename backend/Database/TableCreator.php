@@ -113,6 +113,67 @@ class TableCreator extends Connection{
             );
             file_put_contents('backend/Controller/'.$className.'Controller.php', $generatedController);
     }
+    
+    public function createRoute($model){
+        $reflection = new ReflectionClass($model);
+        $className = $reflection->getShortName();
+        $lowerClassName = lcfirst($className);
+        $properties = $reflection->getProperties(ReflectionProperty::IS_PRIVATE);
+        $settersCodeForPostAndPut = "";
+        foreach ($properties as $property) {
+            $propName = $property->getName();
+            if ($propName !== 'id') { 
+                $camelCasePropName = ucfirst($propName);
+                $settersCodeForPostAndPut .= "\${$lowerClassName}->set$camelCasePropName(\$body['{$propName}']);\n        ";
+            }
+        }
+        $routeTemplate = <<<EOT
+            <?php
+    
+            namespace App\\{$className};
+            require "../../vendor/autoload.php";
+    
+            use App\Controller\\{$className}Controller;
+            use App\Model\\{$className};
+    
+            \${$lowerClassName} = new {$className}();
+    
+            \$body = json_decode(file_get_contents('php://input'), true);
+            \$id = isset(\$_GET['id']) ? \$_GET['id'] : '';
+            switch(\$_SERVER["REQUEST_METHOD"]){
+                case "POST";
+                    $settersCodeForPostAndPut
+                    \${$lowerClassName}Controller = new {$className}Controller(\${$lowerClassName});
+                    \$resultado = \${$lowerClassName}Controller->inserir();
+                    echo json_encode(['status' => \$resultado]);
+                break;
+                case "GET";
+                    \${$lowerClassName}Controller = new {$className}Controller(\${$lowerClassName});
+                    if(!isset(\$_GET['id'])){
+                        \$resultado = \${$lowerClassName}Controller->buscarTodos();
+                        echo json_encode(["status" => !empty(\$resultado), "{$className}" => \$resultado[0]]);
+                    }else{
+                        \$resultado = \${$lowerClassName}Controller->buscarId(\$id);
+                        echo json_encode(["status" => !empty(\$resultado), "{$className}" => \$resultado[0]]);
+                    }
+                break;
+                case "PUT";
+                    $settersCodeForPostAndPut
+                    \${$lowerClassName}Controller = new {$className}Controller(\${$lowerClassName});
+                    \$resultado = \${$lowerClassName}Controller->atualizarId(intval(\$_GET['id']));
+                    echo json_encode(['status' => \$resultado]);
+                break;
+                case "DELETE";
+                    \${$lowerClassName}Controller = new {$className}Controller(\${$lowerClassName});
+                    \$resultado = \${$lowerClassName}Controller->excluir(intval(\$_GET['id']));
+                    echo json_encode(['status' => \$resultado]);
+                break;  
+            }
+            EOT;
+    
+        file_put_contents('backend/Routes/'.$className.'Route.php', $routeTemplate);
+    }
+    
     public function createTests($model){
         $reflection = new ReflectionClass($model);
         $className = $reflection->getShortName();

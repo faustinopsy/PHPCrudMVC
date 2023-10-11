@@ -16,7 +16,7 @@ async  function create() {
         return;
     }
     try {
-        const response = await  fetch('/backend/usuario', { 
+        const response = await  fetch('/backend/Routes/UsuariosRoute.php', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -40,9 +40,12 @@ async  function create() {
             '',
             'success'
           )
-          document.getElementById("nome").value = ''; 
-          document.getElementById("email").value = ''; 
-          document.getElementById("senha").value = ''; 
+          for (let i = 0; i < form.elements.length; i++) {
+            const element = form.elements[i];
+            if (element.name) {
+               element.value='';
+            }
+        }
         } catch (error) {
             Swal.fire(
                 error.message,

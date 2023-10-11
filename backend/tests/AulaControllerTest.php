@@ -1,16 +1,16 @@
 <?php
 
-use App\Controller\UsuariosController;
-use App\Model\Usuarios;
+use App\Controller\AulaController;
+use App\Model\Aula;
 use PHPUnit\Framework\TestCase;
 
-class UsuariosControllerTest extends TestCase {
+class AulaControllerTest extends TestCase {
     protected $controller;
     protected $model;
 
     protected function setUp(): void {
-        $this->model = new Usuarios();
-        $this->controller = new UsuariosController($this->model);
+        $this->model = new Aula();
+        $this->controller = new AulaController($this->model);
     }
 
     public function testInsert() {
