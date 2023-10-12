@@ -63,6 +63,11 @@ try {
         $make->createController($classeMigrate);
         $make->createTableFromModel($classeMigrate);
         $make->createTests($classeMigrate);
+        $make->createRoute($classeMigrate);
+        $make->createJsClasses($className, $properties);
+        $make->createHtmlForm($className, $properties);
+        $make->createHtmlTemplate($className);
+        
         echo json_encode(['success' => true]);
 
         
