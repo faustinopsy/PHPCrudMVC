@@ -111,6 +111,7 @@ class TableCreator extends Connection{
                 [$className],
                 $controllerTemplate
             );
+            
             file_put_contents('backend/Controller/'.$className.'Controller.php', $generatedController);
     }
     

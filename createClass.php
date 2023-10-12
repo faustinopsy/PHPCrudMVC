@@ -52,6 +52,14 @@ try {
         if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
+        $dir2 = "Backend/Controller";
+        if (!is_dir($dir2)) {
+            mkdir($dir2, 0777, true);
+        }
+        $dir3 = "Backend/Routes";
+        if (!is_dir($dir3)) {
+            mkdir($dir3, 0777, true);
+        }
         file_put_contents("$dir/$className.php", $classTemplate);
 
         $make = new TableCreator();
