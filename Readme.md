@@ -1,22 +1,24 @@
-# MicroFramework
+# PHPCrudMVC
 
 ## Descrição
-MicroFramework é um pequeno e simplificado framework PHP, projetado para fornecer funcionalidades básicas e essenciais para o desenvolvimento de aplicações web. Ele oferece uma estrutura básica para operações CRUD (Create, Read, Update, Delete) e gerenciamento de conexões com banco de dados, permitindo que os desenvolvedores se concentrem na lógica de negócios específica de suas aplicações.
-Este MicroFramework visa trazer facilidades que um grande framework tem, porém indo direto ao ponto usando PHP puro sem esconder como as coisas funcionam, este modelo é então idealizado para estudante de programação que queiram entender os fluxo de dados que envolve uma aplicação real que possui uma estrutura MVC e uma capacidade de comunicação REST, onde o frontend é independente do backend, ambos trabalham separados e se comunicam no padrão API REST.
+PHPCrudMVC 5.0.0 é um pequeno e simplificado framework PHP, projetado para fornecer funcionalidades básicas e essenciais para o desenvolvimento de aplicações web. Ele oferece uma estrutura básica para operações CRUD (Create, Read, Update, Delete) e gerenciamento de conexões com banco de dados, permitindo que os desenvolvedores se concentrem na lógica de negócios específica de suas aplicações.
+Este MicroFramework visa trazer facilidades que um grande framework tem, porém indo direto ao ponto usando PHP puro com PSR-4 sem esconder como as coisas funcionam, este modelo é então idealizado para estudante de programação que queiram entender os fluxos de dados que envolve uma aplicação real.
+Com a estrutura MVC e uma capacidade de comunicação REST, onde o frontend é independente do backend, ambos trabalham separados e se comunicam no padrão API REST.
 
 ## Instalação
 Clone o repositório
 ```bash
-git clone https://github.com/faustinopsy/miniframework.git
+git clone https://github.com/faustinopsy/PHPCrudMVC.git
 ```
 Instale as dependências do Composer
 ```bash
 composer install
 ```
-## Configuração Inicial e Criação de Classes
+
 
 ### Instalação e Configuração Inicial
-O arquivo `install.php` na raiz do projeto facilita a configuração inicial do banco de dados e a criação de classes e tabelas correspondentes. Ao acessar este arquivo, será apresentado um formulário solicitando as credenciais do banco de dados e, em seguida, criará o banco de dados conforme especificado.
+O arquivo `install.php` na raiz do projeto facilita a configuração inicial do banco de dados e a criação de classes e tabelas correspondentes. Ao acessar este arquivo, será apresentado um formulário `migrate.php` solicitando as credenciais do banco de dados e, em seguida, criará o banco de dados conforme especificado, onde você fornece o nome da classe a ser criada e suas propriedades, em seguida abrirá os campos para colocar os nomes das propriedades e seus tipos, após confirmar será criado no diretório Model a classe, e no diretório Controller será criado as classe controller correspondente, e também será criado n diretório Routers o arquivo de rotas correspondente a classe controller.
+ o `migrate.php` poderá ser chamado sempre que houver necessidade de criação de classes sem a necessidade de iniciar pelo install
 
 ### Criação Automática de Classes e Tabelas
 Após a configuração inicial do banco de dados, o `install.php` (lembre-se de não subir para produção nem o install.php nem o migrate.php) também facilita a criação de classes modelo e suas tabelas correspondentes no banco de dados. O usuário pode especificar o nome da classe e suas propriedades (nome e tipo) através de um formulário. Com base nessas informações, o seguinte é gerado automaticamente:
@@ -24,6 +26,8 @@ Após a configuração inicial do banco de dados, o `install.php` (lembre-se de 
 - **Controlador**: Um controlador correspondente no diretório `Backend/Controller` que facilita as operações CRUD para o modelo.
 - **Tabela de Banco de Dados**: Uma tabela no banco de dados que corresponde ao modelo, com colunas que representam as propriedades da classe.
 - **Procedures**: Procedures SQL para operações básicas de CRUD relacionadas à tabela criada.
+
+- **Frontend**:será criado na raiz os htmls responsáveis chamar as requisições por meios dos arquivos javascipt correspondentes que são criados também.
 
 ### Geração de Classes JavaScript e Formulários HTML
 Foi descontinuado a criação de javascript e formulários html, mas na raiz encontra-se modelos para realizar uma cópia e reproduzir para as classes correspondentes, e ajustar o caminho para a rota especifica
@@ -46,17 +50,7 @@ O projeto é estruturado de maneira clara e concisa, facilitando a compreensão 
 - **backend/Controller/UserController**: Um exemplo de controlador que estende as funcionalidades da classe Crud, permitindo a manipulação de dados do usuário.
 - **backend/Model/Usuarios**: uma classe com propriedades estaticamente tipadas, este é um requisito para que se crie as tabelas do banco de dados de forma mapeada
 - **backend/Database/TableCreate**: é a classe responsável por criar as tabelas no banco de dados quando ela recebe a classe model correspondente e cria também os store procedure para a classe.
-    - **exemplo de uso do ORM (Mapeamento obejeto relacional)** : 
-    o exemplo abaixo mostra que a oser  executado é criado uma tabela no banco de dados respeitando a estrutura da classe, desde que a classe siga o modelo de propriedades privadas e tipagem estatica como a classe usuarios que esta no diretório Model.
-    para usar foi criado um arquivo chamado migrate.php na raiz do projeto que ao ser chamado irá criar as tabelas e as procedures
-   ```bash
-
-    use App\Database\TableCreator;
-    use App\Model\Usuarios;
-    $table = new TableCreator();
-    $user = new Usuarios();
-    $table->createTableFromModel($user);
-    ```
+    
 ### Connection
 A classe Connection é responsável por estabelecer e gerenciar a conexão com o banco de dados. Ela utiliza PDO para garantir a compatibilidade com diversos sistemas de gerenciamento de banco de dados.
 
