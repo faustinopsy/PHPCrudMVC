@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for C:\Users\DELL\Downloads\OneDrive\Documentos\GitHub\miniframework\backend\Database</title>
+  <title>Dashboard for C:\Users\DELL\Downloads\OneDrive\Documentos\GitHub\miniframework\backend\Routes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../_css/bootstrap.min.css?v=10.1.7" rel="stylesheet" type="text/css">
   <link href="../_css/nv.d3.min.css?v=10.1.7" rel="stylesheet" type="text/css">
@@ -17,7 +17,7 @@
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="../index.html">C:\Users\DELL\Downloads\OneDrive\Documentos\GitHub\miniframework\backend</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Database</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Routes</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -58,9 +58,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="Connection.php.html#7">App\Database\Connection</a></td><td class="text-right">48%</td></tr>
-       <tr><td><a href="TableCreator.php.html#11">App\Database\TableCreator</a></td><td class="text-right">52%</td></tr>
-       <tr><td><a href="Crud.php.html#8">App\Database\Crud</a></td><td class="text-right">65%</td></tr>
 
        </tbody>
       </table>
@@ -77,9 +74,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="TableCreator.php.html#11">App\Database\TableCreator</a></td><td class="text-right">86</td></tr>
-       <tr><td><a href="Connection.php.html#7">App\Database\Connection</a></td><td class="text-right">31</td></tr>
-       <tr><td><a href="Crud.php.html#8">App\Database\Crud</a></td><td class="text-right">26</td></tr>
 
        </tbody>
       </table>
@@ -117,12 +111,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="Crud.php.html#54"><abbr title="App\Database\Crud::update">update</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="TableCreator.php.html#75"><abbr title="App\Database\TableCreator::createController">createController</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="TableCreator.php.html#117"><abbr title="App\Database\TableCreator::createRoute">createRoute</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="TableCreator.php.html#177"><abbr title="App\Database\TableCreator::createTests">createTests</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="Connection.php.html#25"><abbr title="App\Database\Connection::connect">connect</abbr></a></td><td class="text-right">33%</td></tr>
-       <tr><td><a href="TableCreator.php.html#17"><abbr title="App\Database\TableCreator::mapPhpTypeToSqlType">mapPhpTypeToSqlType</abbr></a></td><td class="text-right">54%</td></tr>
 
        </tbody>
       </table>
@@ -139,10 +127,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="Connection.php.html#25"><abbr title="App\Database\Connection::connect">connect</abbr></a></td><td class="text-right">46</td></tr>
-       <tr><td><a href="Crud.php.html#54"><abbr title="App\Database\Crud::update">update</abbr></a></td><td class="text-right">30</td></tr>
-       <tr><td><a href="TableCreator.php.html#117"><abbr title="App\Database\TableCreator::createRoute">createRoute</abbr></a></td><td class="text-right">12</td></tr>
-       <tr><td><a href="TableCreator.php.html#17"><abbr title="App\Database\TableCreator::mapPhpTypeToSqlType">mapPhpTypeToSqlType</abbr></a></td><td class="text-right">11</td></tr>
 
        </tbody>
       </table>
@@ -171,7 +155,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([0,0,0,0,0,1,1,1,0,0,0,0], "Class Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -189,7 +173,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([4,0,0,0,1,0,1,0,1,0,0,12], "Method Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -239,7 +223,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[48.57142857142857,12,"<a href=\"Connection.php.html#7\">App\\Database\\Connection<\/a>"],[65.07936507936508,16,"<a href=\"Crud.php.html#8\">App\\Database\\Crud<\/a>"],[52.317880794701985,24,"<a href=\"TableCreator.php.html#11\">App\\Database\\TableCreator<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -263,7 +247,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[100,1,"<a href=\"Connection.php.html#14\">App\\Database\\Connection::__construct<\/a>"],[33.33333333333333,11,"<a href=\"Connection.php.html#25\">App\\Database\\Connection::connect<\/a>"],[100,1,"<a href=\"Crud.php.html#9\">App\\Database\\Crud::__construct<\/a>"],[100,1,"<a href=\"Crud.php.html#12\">App\\Database\\Crud::getLastInsertId<\/a>"],[100,4,"<a href=\"Crud.php.html#15\">App\\Database\\Crud::insert<\/a>"],[100,3,"<a href=\"Crud.php.html#37\">App\\Database\\Crud::select<\/a>"],[0,5,"<a href=\"Crud.php.html#54\">App\\Database\\Crud::update<\/a>"],[100,2,"<a href=\"Crud.php.html#82\">App\\Database\\Crud::delete<\/a>"],[100,1,"<a href=\"TableCreator.php.html#13\">App\\Database\\TableCreator::__construct<\/a>"],[54.54545454545454,7,"<a href=\"TableCreator.php.html#17\">App\\Database\\TableCreator::mapPhpTypeToSqlType<\/a>"],[74.19354838709677,6,"<a href=\"TableCreator.php.html#34\">App\\Database\\TableCreator::createTableFromModel<\/a>"],[0,1,"<a href=\"TableCreator.php.html#75\">App\\Database\\TableCreator::createController<\/a>"],[0,3,"<a href=\"TableCreator.php.html#117\">App\\Database\\TableCreator::createRoute<\/a>"],[0,1,"<a href=\"TableCreator.php.html#177\">App\\Database\\TableCreator::createTests<\/a>"],[100,1,"<a href=\"TableCreator.php.html#299\">App\\Database\\TableCreator::createInsertProcedure<\/a>"],[100,1,"<a href=\"TableCreator.php.html#317\">App\\Database\\TableCreator::createUpdateProcedure<\/a>"],[100,1,"<a href=\"TableCreator.php.html#339\">App\\Database\\TableCreator::createDeleteProcedure<\/a>"],[100,1,"<a href=\"TableCreator.php.html#352\">App\\Database\\TableCreator::createSelectAllProcedure<\/a>"],[100,1,"<a href=\"TableCreator.php.html#365\">App\\Database\\TableCreator::createSelectByIdProcedure<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);
