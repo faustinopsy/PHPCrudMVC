@@ -1,7 +1,7 @@
 # PHPCrudMVC
 
 ## Descrição
-PHPCrudMVC 5.0.0 é um pequeno e simplificado framework PHP, projetado para fornecer funcionalidades básicas e essenciais para o desenvolvimento de aplicações web. Ele oferece uma estrutura básica para operações CRUD (Create, Read, Update, Delete) e gerenciamento de conexões com banco de dados, permitindo que os desenvolvedores se concentrem na lógica de negócios específica de suas aplicações.
+PHPCrudMVC 5.1.0 (Atualizado 20-10-2023 layout materializecss) é um pequeno e simplificado framework PHP, projetado para fornecer funcionalidades básicas e essenciais para o desenvolvimento de aplicações web. Ele oferece uma estrutura básica para operações CRUD (Create, Read, Update, Delete) e gerenciamento de conexões com banco de dados, permitindo que os desenvolvedores se concentrem na lógica de negócios específica de suas aplicações.
 Este MicroFramework visa trazer facilidades que um grande framework tem, porém indo direto ao ponto usando PHP puro com PSR-4 sem esconder como as coisas funcionam, este modelo é então idealizado para estudante de programação que queiram entender os fluxos de dados que envolve uma aplicação real.
 Com a estrutura MVC e uma capacidade de comunicação REST, onde o frontend é independente do backend, ambos trabalham separados e se comunicam no padrão API REST.
 
