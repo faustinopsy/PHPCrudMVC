@@ -449,7 +449,7 @@ class TableCreator extends Connection{
         $jsUpdateTemplate .= "async search(id) {\n";
         $jsUpdateTemplate .= "\n";
         $jsUpdateTemplate .= "    try {\n";
-        $jsUpdateTemplate .= "        const response = await fetch(`/backend/Routes/PessoaRoute.php?id=\${id}`, { \n";
+        $jsUpdateTemplate .= "        const response = await fetch(`/backend/Routes/{$className}Route.php?id=\${id}`, { \n";
         $jsUpdateTemplate .= "       method: 'GET',\n";
         $jsUpdateTemplate .= "    headers: {\n";
         $jsUpdateTemplate .= "            'Content-Type': 'application/json'\n";
