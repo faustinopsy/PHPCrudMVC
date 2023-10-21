@@ -530,6 +530,13 @@ class TableCreator extends Connection{
         $jsUpdateTemplate .= "          '',\n";
         $jsUpdateTemplate .= "          'success'\n";
         $jsUpdateTemplate .= "      );\n";
+        $jsUpdateTemplate .= " const form = document.forms['$className-form'];\n";
+        $jsUpdateTemplate .= "      for (let i = 0; i < form.elements.length; i++) {\n";
+        $jsUpdateTemplate .= "          const element = form.elements[i];\n";
+        $jsUpdateTemplate .= "          if (element.name) {\n";
+        $jsUpdateTemplate .= "              element.value='';\n";
+        $jsUpdateTemplate .= "          }\n";
+        $jsUpdateTemplate .= "      }\n";
         $jsUpdateTemplate .= "      } catch (error) {\n";
         $jsUpdateTemplate .= "          Swal.fire(\n";
         $jsUpdateTemplate .= "              error.message,\n";
@@ -568,110 +575,373 @@ class TableCreator extends Connection{
         $htmlTemplate = "<!DOCTYPE html>\n";
         $htmlTemplate .= "<html lang=\"en\">\n";
         $htmlTemplate .= "<head>\n";
-        $htmlTemplate .= "    <meta charset=\"UTF-8\">\n";
-        $htmlTemplate .= "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
-        $htmlTemplate .= "    <title>$className Form</title>\n";
-        $htmlTemplate .= "<link rel=\"stylesheet\" href=\"css/styles.css\">\n";
+        $htmlTemplate .= "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n";
+        $htmlTemplate .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1.0\"/>\n";
+        $htmlTemplate .= "  <title>Starter Template - Materialize</title>\n";
+        $htmlTemplate .= "  <!-- CSS  -->\n";
+        $htmlTemplate .= "  <link href=\"css/materialize.css\" type=\"text/css\" rel=\"stylesheet\" media=\"screen,projection\"/>\n";
         $htmlTemplate .= "<link rel=\"stylesheet\" href=\"css/sweetalert2.min.css\">\n";
-        $htmlTemplate .= "</head>\n";
+        $htmlTemplate .= " </head>\n";
         $htmlTemplate .= "<body>\n";
+        $htmlTemplate .= "  <nav class=\"light-green lighten-1\" role=\"navigation\" >\n";
+        $htmlTemplate .= "    <div class=\"nav-wrapper container\"><a id=\"logo-container\" href=\"#\" class=\"brand-logo\">Logo</a>\n";
+        $htmlTemplate .= "      <ul class=\"right hide-on-med-and-down\">\n";
+        $htmlTemplate .= "        <li><a href=\"cria$className.html\">Cadastrar</a></li>\n";
+        $htmlTemplate .= "        <li><a href=\"todos$className.html\">Listar todos</a></li>\n";
+        $htmlTemplate .= "        <li><a href=\"gerenciar$className.html\">Buscar</a></li>\n";
+        $htmlTemplate .= "     </ul>\n";
+        $htmlTemplate .= "\n";
+        $htmlTemplate .= "      <ul id=\"nav-mobile\" class=\"sidenav\">\n";
+        $htmlTemplate .= "        <li><a href=\"cria$className.html\">Cadastrar</a></li>\n";
+        $htmlTemplate .= "       <li><a href=\"todos$className.html\">Listar todos</a></li>\n";
+        $htmlTemplate .= "       <li><a href=\"gerenciar$className.html\">Buscar</a></li>\n";
+        $htmlTemplate .= "      </ul>\n";
+        $htmlTemplate .= "      <a href=\"#\" data-target=\"nav-mobile\" class=\"sidenav-trigger\"><i class=\"material-icons\">menu</i></a>\n";
+        $htmlTemplate .= "    </div>\n";
+        $htmlTemplate .= "  </nav>\n";
+        $htmlTemplate .= "  <div class=\"section no-pad-bot\" id=\"index-banner\">\n";
+        $htmlTemplate .= "    <div class=\"container\">\n";
         $htmlTemplate .= "<div class=\"card\">\n";
-        $htmlTemplate .= "<a href=\"../\">Voltar</a>\n";
+        $htmlTemplate .= "<a href=\"../\" class=\"waves-effect waves-light btn\">Voltar</a>\n";
         $htmlTemplate .= "    <form id=\"$className-form\">\n";
         foreach ($properties as $property) {
             if ($property['name'] === 'id') {
                 continue; 
             }
-            $htmlTemplate .= "        <label for=\"{$property['name']}\">{$property['name']}:</label>\n";
-            $htmlTemplate .= "        <input type=\"text\" id=\"{$property['name']}\" name=\"{$property['name']}\"><br>\n";
+            $htmlTemplate .= "            <div class=\"input-field col s6\">\n";
+            $htmlTemplate .= "              <input type=\"text\" id=\"{$property['name']}\" name=\"{$property['name']}\"><br>\n";
+            $htmlTemplate .= "              <label for=\"{$property['name']}\">{$property['name']}:</label>\n";
+            $htmlTemplate .= "          </div>\n";
         }
-        $htmlTemplate .= "        <input type=\"submit\" value=\"Submit\">\n";
+        $htmlTemplate .= "        <input type=\"submit\" value=\"Submit\" class=\"waves-effect waves-light btn\">\n";
         $htmlTemplate .= "    </form>\n";
         $htmlTemplate .= "</div>\n";
-        $htmlTemplate .= "<script src=\"js/sweetalert2.all.min.js\"></script>\n";
+        $htmlTemplate .= "</div>\n";
+        $htmlTemplate .= "  <footer class=\"page-footer light-green\">\n";
+        $htmlTemplate .= "    <div class=\"container\">\n";
+        $htmlTemplate .= "      <div class=\"row\">\n";
+        $htmlTemplate .= "        <div class=\"col l6 s12\">\n";
+        $htmlTemplate .= "          <h5 class=\"white-text\">Company Bio</h5>\n";
+        $htmlTemplate .= "          <p class=\"grey-text text-lighten-4\"></p>\n";
+        $htmlTemplate .= "        </div>\n";
+        $htmlTemplate .= "        <div class=\"col l3 s12\">\n";
+        $htmlTemplate .= "          <h5 class=\"white-text\">Settings</h5>\n";
+        $htmlTemplate .= "          <ul>\n";
+        $htmlTemplate .= "            <li><a class=\"white-text\" href=\"#!\">Link 1</a></li>\n";
+        $htmlTemplate .= "            <li><a class=\"white-text\" href=\"#!\">Link 2</a></li>\n";
+        $htmlTemplate .= "            <li><a class=\"white-text\" href=\"#!\">Link 3</a></li>\n";
+        $htmlTemplate .= "            <li><a class=\"white-text\" href=\"#!\">Link 4</a></li>\n";
+        $htmlTemplate .= "          </ul>\n";
+        $htmlTemplate .= "        </div>\n";
+        $htmlTemplate .= "        <div class=\"col l3 s12\">\n";
+        $htmlTemplate .= "          <h5 class=\"white-text\">Connect</h5>\n";
+        $htmlTemplate .= "          <ul>\n";
+        $htmlTemplate .= "            <li><a class=\"white-text\" href=\"#!\">Link 1</a></li>\n";
+        $htmlTemplate .= "            <li><a class=\"white-text\" href=\"#!\">Link 2</a></li>\n";
+        $htmlTemplate .= "            <li><a class=\"white-text\" href=\"#!\">Link 3</a></li>\n";
+        $htmlTemplate .= "            <li><a class=\"white-text\" href=\"#!\">Link 4</a></li>\n";
+        $htmlTemplate .= "         </ul>\n";
+        $htmlTemplate .= "        </div>\n";
+        $htmlTemplate .= "      </div>\n";
+        $htmlTemplate .= "   </div>\n";
+        $htmlTemplate .= "    <div class=\"footer-copyright\">\n";
+        $htmlTemplate .= "    </div>\n";
+        $htmlTemplate .= "  </footer>\n";
+        $htmlTemplate .= "  <!--  Scripts-->\n";
+        $htmlTemplate .= "  <script src=\"js/jquery-2.1.1.min.js\"></script>\n";
+        $htmlTemplate .= "  <script src=\"js/materialize.js\"></script>\n";
+        $htmlTemplate .= "  <script src=\"js/init.js\"></script>\n";
+        $htmlTemplate .= "    <script src=\"js/materialize.min.js\"></script>\n";
+        $htmlTemplate .= "    <script src=\"js/sweetalert2.all.min.js\"></script>\n";
         $htmlTemplate .= "    <script src=\"js/Create$className.js\"></script>\n";
-        $htmlTemplate .= "</body>\n";
+        $htmlTemplate .= "  </body>\n";
         $htmlTemplate .= "</html>\n";
     
         file_put_contents("cria$className.html", $htmlTemplate);
+
         $htmlTemplate2 = "<!DOCTYPE html>\n";
-        $htmlTemplate2 .= "<html lang=\"pt_BR\">\n";
+        $htmlTemplate2 .= "<html lang=\"en\">\n";
         $htmlTemplate2 .= "<head>\n";
-        $htmlTemplate2 .= "<meta charset=\"UTF-8\">\n";
-        $htmlTemplate2 .= "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
-        $htmlTemplate2 .= "<title>$className</title>\n";
-        $htmlTemplate2 .= "<link rel=\"stylesheet\" href=\"css/styles.css\">\n";
+        $htmlTemplate2 .= "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n";
+        $htmlTemplate2 .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1.0\"/>\n";
+        $htmlTemplate2 .= "  <title>Starter Template - Materialize</title>\n";
+        $htmlTemplate2 .= "  <!-- CSS  -->\n";
+        $htmlTemplate2 .= "  <link href=\"css/materialize.css\" type=\"text/css\" rel=\"stylesheet\" media=\"screen,projection\"/>\n";
         $htmlTemplate2 .= "<link rel=\"stylesheet\" href=\"css/sweetalert2.min.css\">\n";
-        $htmlTemplate2 .= "</head>\n";
+        $htmlTemplate2 .= " </head>\n";
         $htmlTemplate2 .= "<body>\n";
+        $htmlTemplate2 .= "  <nav class=\"light-green lighten-1\" role=\"navigation\" >\n";
+        $htmlTemplate2 .= "    <div class=\"nav-wrapper container\"><a id=\"logo-container\" href=\"#\" class=\"brand-logo\">Logo</a>\n";
+        $htmlTemplate2 .= "      <ul class=\"right hide-on-med-and-down\">\n";
+        $htmlTemplate2 .= "        <li><a href=\"cria$className.html\">Cadastrar</a></li>\n";
+        $htmlTemplate2 .= "        <li><a href=\"todos$className.html\">Listar todos</a></li>\n";
+        $htmlTemplate2 .= "        <li><a href=\"gerenciar$className.html\">Buscar</a></li>\n";
+        $htmlTemplate2 .= "     </ul>\n";
+        $htmlTemplate2 .= "\n";
+        $htmlTemplate2 .= "      <ul id=\"nav-mobile\" class=\"sidenav\">\n";
+        $htmlTemplate2 .= "        <li><a href=\"cria$className.html\">Cadastrar</a></li>\n";
+        $htmlTemplate2 .= "       <li><a href=\"todos$className.html\">Listar todos</a></li>\n";
+        $htmlTemplate2 .= "       <li><a href=\"gerenciar$className.html\">Buscar</a></li>\n";
+        $htmlTemplate2 .= "      </ul>\n";
+        $htmlTemplate2 .= "      <a href=\"#\" data-target=\"nav-mobile\" class=\"sidenav-trigger\"><i class=\"material-icons\">menu</i></a>\n";
+        $htmlTemplate2 .= "    </div>\n";
+        $htmlTemplate2 .= "  </nav>\n";
+        $htmlTemplate2 .= "  <div class=\"section no-pad-bot\" id=\"index-banner\">\n";
+        $htmlTemplate2 .= "    <div class=\"container\">\n";
         $htmlTemplate2 .= "<div class=\"card\">\n";
-        $htmlTemplate2 .= "<a href=\"../\">Voltar</a>\n";
+        $htmlTemplate2 .= "<a href=\"../\" class=\"waves-effect waves-light btn\">Voltar</a>\n";
         $htmlTemplate2 .= "<div id=\"Lista\"></div>\n";
         $htmlTemplate2 .= "</div>\n";
-        $htmlTemplate2 .= "<script src=\"js/sweetalert2.all.min.js\"></script>\n";
-        $htmlTemplate2 .= "<script src=\"js/Busca{$className}s.js\"></script> \n";
-        $htmlTemplate2 .= "</body>\n";
-        $htmlTemplate2 .= "</html>";
+        
+        $htmlTemplate2 .= "</div>\n";
+        $htmlTemplate2 .= "  <footer class=\"page-footer light-green\">\n";
+        $htmlTemplate2 .= "    <div class=\"container\">\n";
+        $htmlTemplate2 .= "      <div class=\"row\">\n";
+        $htmlTemplate2 .= "        <div class=\"col l6 s12\">\n";
+        $htmlTemplate2 .= "          <h5 class=\"white-text\">Company Bio</h5>\n";
+        $htmlTemplate2 .= "          <p class=\"grey-text text-lighten-4\"></p>\n";
+        $htmlTemplate2 .= "        </div>\n";
+        $htmlTemplate2 .= "        <div class=\"col l3 s12\">\n";
+        $htmlTemplate2 .= "          <h5 class=\"white-text\">Settings</h5>\n";
+        $htmlTemplate2 .= "          <ul>\n";
+        $htmlTemplate2 .= "            <li><a class=\"white-text\" href=\"#!\">Link 1</a></li>\n";
+        $htmlTemplate2 .= "            <li><a class=\"white-text\" href=\"#!\">Link 2</a></li>\n";
+        $htmlTemplate2 .= "            <li><a class=\"white-text\" href=\"#!\">Link 3</a></li>\n";
+        $htmlTemplate2 .= "            <li><a class=\"white-text\" href=\"#!\">Link 4</a></li>\n";
+        $htmlTemplate2 .= "          </ul>\n";
+        $htmlTemplate2 .= "        </div>\n";
+        $htmlTemplate2 .= "        <div class=\"col l3 s12\">\n";
+        $htmlTemplate2 .= "          <h5 class=\"white-text\">Connect</h5>\n";
+        $htmlTemplate2 .= "          <ul>\n";
+        $htmlTemplate2 .= "            <li><a class=\"white-text\" href=\"#!\">Link 1</a></li>\n";
+        $htmlTemplate2 .= "            <li><a class=\"white-text\" href=\"#!\">Link 2</a></li>\n";
+        $htmlTemplate2 .= "            <li><a class=\"white-text\" href=\"#!\">Link 3</a></li>\n";
+        $htmlTemplate2 .= "            <li><a class=\"white-text\" href=\"#!\">Link 4</a></li>\n";
+        $htmlTemplate2 .= "         </ul>\n";
+        $htmlTemplate2 .= "        </div>\n";
+        $htmlTemplate2 .= "      </div>\n";
+        $htmlTemplate2 .= "   </div>\n";
+        $htmlTemplate2 .= "    <div class=\"footer-copyright\">\n";
+        $htmlTemplate2 .= "    </div>\n";
+        $htmlTemplate2 .= "  </footer>\n";
+        $htmlTemplate2 .= "  <!--  Scripts-->\n";
+        $htmlTemplate2 .= "    <script src=\"js/jquery-2.1.1.min.js\"></script>\n";
+        $htmlTemplate2 .= "    <script src=\"js/materialize.min.js\"></script>\n";
+        $htmlTemplate2 .= "    <script src=\"js/init.js\"></script>\n";
+        $htmlTemplate2 .= "    <script src=\"js/sweetalert2.all.min.js\"></script>\n";
+        $htmlTemplate2 .= "    <script src=\"js/Busca{$className}s.js\"></script> \n";
+        $htmlTemplate2 .= "  </body>\n";
+        $htmlTemplate2 .= "</html>\n";
     
         file_put_contents("todos$className.html", $htmlTemplate2);
 
         $htmlTemplate3 = "<!DOCTYPE html>\n";
-        $htmlTemplate3 .= "<html lang=\"pt_BR\">\n";
+        $htmlTemplate3 .= "<html lang=\"en\">\n";
         $htmlTemplate3 .= "<head>\n";
-        $htmlTemplate3 .= "    <meta charset=\"UTF-8\">\n";
-        $htmlTemplate3 .= "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
-        $htmlTemplate3 .= "    <link rel=\"stylesheet\" href=\"css/styles.css\">\n";
-        $htmlTemplate3 .= "    <link rel=\"stylesheet\" href=\"css/sweetalert2.min.css\">\n";
-        $htmlTemplate3 .= "    <title>Gerenciamento de $className</title>\n";
-        $htmlTemplate3 .= "</head>\n";
+        $htmlTemplate3 .= "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n";
+        $htmlTemplate3 .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1.0\"/>\n";
+        $htmlTemplate3 .= "  <title>Starter Template - Materialize</title>\n";
+        $htmlTemplate3 .= "  <!-- CSS  -->\n";
+        $htmlTemplate3 .= "  <link href=\"css/materialize.css\" type=\"text/css\" rel=\"stylesheet\" media=\"screen,projection\"/>\n";
+        $htmlTemplate3 .= "<link rel=\"stylesheet\" href=\"css/sweetalert2.min.css\">\n";
+        $htmlTemplate3 .= " </head>\n";
         $htmlTemplate3 .= "<body>\n";
+        $htmlTemplate3 .= "  <nav class=\"light-green lighten-1\" role=\"navigation\" >\n";
+        $htmlTemplate3 .= "    <div class=\"nav-wrapper container\"><a id=\"logo-container\" href=\"#\" class=\"brand-logo\">Logo</a>\n";
+        $htmlTemplate3 .= "      <ul class=\"right hide-on-med-and-down\">\n";
+        $htmlTemplate3 .= "        <li><a href=\"cria$className.html\">Cadastrar</a></li>\n";
+        $htmlTemplate3 .= "        <li><a href=\"todos$className.html\">Listar todos</a></li>\n";
+        $htmlTemplate3 .= "        <li><a href=\"gerenciar$className.html\">Buscar</a></li>\n";
+        $htmlTemplate3 .= "     </ul>\n";
+        $htmlTemplate3 .= "\n";
+        $htmlTemplate3 .= "      <ul id=\"nav-mobile\" class=\"sidenav\">\n";
+        $htmlTemplate3 .= "        <li><a href=\"cria$className.html\">Cadastrar</a></li>\n";
+        $htmlTemplate3 .= "       <li><a href=\"todos$className.html\">Listar todos</a></li>\n";
+        $htmlTemplate3 .= "       <li><a href=\"gerenciar$className.html\">Buscar</a></li>\n";
+        $htmlTemplate3 .= "      </ul>\n";
+        $htmlTemplate3 .= "      <a href=\"#\" data-target=\"nav-mobile\" class=\"sidenav-trigger\"><i class=\"material-icons\">menu</i></a>\n";
+        $htmlTemplate3 .= "    </div>\n";
+        $htmlTemplate3 .= "  </nav>\n";
+        $htmlTemplate3 .= "  <div class=\"section no-pad-bot\" id=\"index-banner\">\n";
+        $htmlTemplate3 .= "    <div class=\"container\">\n";
         $htmlTemplate3 .= "    <div class=\"card\">\n";
         $htmlTemplate3 .= "        <form id=\"$className-form\">\n";
-        $htmlTemplate3 .= "            <a href=\"../\">Voltar</a>\n";
+        $htmlTemplate3 .= "            <a href=\"../\" class=\"waves-effect waves-light btn\">Voltar</a>\n";
         $htmlTemplate3 .= "            <h3>Buscar $className</h3>\n";
+        $htmlTemplate3 .= "            <div class=\"input-field col s6\">\n";
+        $htmlTemplate3 .= "            <input type=\"number\" id=\"id$className\" class=\"validate\">\n";
         $htmlTemplate3 .= "            <label for=\"id-to\">ID do $className:</label>\n";
-        $htmlTemplate3 .= "            <input type=\"number\" id=\"id$className\">\n";
-        $htmlTemplate3 .= "            <button id=\"search-button\">Buscar</button><br>\n";
+        $htmlTemplate3 .= "            </div>\n";
+        $htmlTemplate3 .= "            <button id=\"search-button\" class=\"waves-effect waves-light btn\">Buscar</button><br>\n";
         $htmlTemplate3 .= "            <h3>Gerenciar $className</h3>\n";
     
         foreach ($properties as $property) {
             if ($property['name'] === 'id') {
                 continue; 
             }
-            $htmlTemplate3 .= "            <label for=\"{$property['name']}\">{$property['name']}:</label>\n";
+            $htmlTemplate3 .= "            <div class=\"input-field col s6\">\n";
             $htmlTemplate3 .= "            <input type=\"text\" id=\"{$property['name']}\" name=\"{$property['name']}\" required><br>\n";
+            $htmlTemplate3 .= "            <label for=\"{$property['name']}\">{$property['name']}:</label>\n";
+            $htmlTemplate3 .= "            </div>\n";
         }
     
-        $htmlTemplate3 .= "            <button id=\"update-button\">Atualizar</button>\n";
-        $htmlTemplate3 .= "            <button id=\"delete-button\">Excluir</button>\n";
+        $htmlTemplate3 .= "            <button id=\"update-button\" class=\"waves-effect waves-light btn\">Atualizar</button>\n";
+        $htmlTemplate3 .= "            <button id=\"delete-button\" class=\"waves-effect waves-light btn\">Excluir</button>\n";
         $htmlTemplate3 .= "        </form>\n";
         $htmlTemplate3 .= "    </div>\n";
+        $htmlTemplate3 .= "</div>\n";
+        $htmlTemplate3 .= "  <footer class=\"page-footer light-green\">\n";
+        $htmlTemplate3 .= "    <div class=\"container\">\n";
+        $htmlTemplate3 .= "      <div class=\"row\">\n";
+        $htmlTemplate3 .= "        <div class=\"col l6 s12\">\n";
+        $htmlTemplate3 .= "          <h5 class=\"white-text\">Company Bio</h5>\n";
+        $htmlTemplate3 .= "          <p class=\"grey-text text-lighten-4\"></p>\n";
+        $htmlTemplate3 .= "        </div>\n";
+        $htmlTemplate3 .= "        <div class=\"col l3 s12\">\n";
+        $htmlTemplate3 .= "          <h5 class=\"white-text\">Settings</h5>\n";
+        $htmlTemplate3 .= "          <ul>\n";
+        $htmlTemplate3 .= "            <li><a class=\"white-text\" href=\"#!\">Link 1</a></li>\n";
+        $htmlTemplate3 .= "            <li><a class=\"white-text\" href=\"#!\">Link 2</a></li>\n";
+        $htmlTemplate3 .= "            <li><a class=\"white-text\" href=\"#!\">Link 3</a></li>\n";
+        $htmlTemplate3 .= "            <li><a class=\"white-text\" href=\"#!\">Link 4</a></li>\n";
+        $htmlTemplate3 .= "          </ul>\n";
+        $htmlTemplate3 .= "        </div>\n";
+        $htmlTemplate3 .= "        <div class=\"col l3 s12\">\n";
+        $htmlTemplate3 .= "          <h5 class=\"white-text\">Connect</h5>\n";
+        $htmlTemplate3 .= "          <ul>\n";
+        $htmlTemplate3 .= "            <li><a class=\"white-text\" href=\"#!\">Link 1</a></li>\n";
+        $htmlTemplate3 .= "            <li><a class=\"white-text\" href=\"#!\">Link 2</a></li>\n";
+        $htmlTemplate3 .= "            <li><a class=\"white-text\" href=\"#!\">Link 3</a></li>\n";
+        $htmlTemplate3 .= "            <li><a class=\"white-text\" href=\"#!\">Link 4</a></li>\n";
+        $htmlTemplate3 .= "         </ul>\n";
+        $htmlTemplate3 .= "        </div>\n";
+        $htmlTemplate3 .= "      </div>\n";
+        $htmlTemplate3 .= "   </div>\n";
+        $htmlTemplate3 .= "    <div class=\"footer-copyright\">\n";
+        $htmlTemplate3 .= "    </div>\n";
+        $htmlTemplate3 .= "  </footer>\n";
+        $htmlTemplate3 .= "  <!--  Scripts-->\n";
+        $htmlTemplate3 .= "  <script src=\"js/jquery-2.1.1.min.js\"></script>\n";
+        $htmlTemplate3 .= "    <script src=\"js/materialize.min.js\"></script>\n";
+        $htmlTemplate3 .= "  <script src=\"js/init.js\"></script>\n";
         $htmlTemplate3 .= "    <script src=\"js/sweetalert2.all.min.js\"></script>\n";
         $htmlTemplate3 .= "    <script src=\"js/Gerenciar$className.js\"></script>\n";
-        $htmlTemplate3 .= "</body>\n";
+        $htmlTemplate3 .= "  </body>\n";
         $htmlTemplate3 .= "</html>\n";
     
         file_put_contents("gerenciar$className.html", $htmlTemplate3);
     } 
     public function createHtmlTemplate($className) {
         $htmlTemplate = <<<EOT
-    <!DOCTYPE html>
-    <html lang="pt_BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Formulário de {{className}}</title>
-        <link rel="stylesheet" href="css/styles.css">
-    </head>
-    <body>
-        <div class="card">
-            <h1>Escolha a Opção</h1>
-            <a href="cria{{className}}.html">Cadastrar</a><br>
-            <a href="todos{{className}}.html">Listar todos</a><br>
-            <a href="gerenciar{{className}}.html">Buscar</a>
-        </div>
-    </body>
-    </html>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+          <title>Starter Template - Materialize</title>
+          <!-- CSS  -->
+          <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+          <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+        </head>
+        <body>
+          <nav class="light-green lighten-1" role="navigation" >
+            <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+              <ul class="right hide-on-med-and-down">
+                <li><a href="cria{{className}}.html">Cadastrar</a></li>
+                <li><a href="todos{{className}}.html">Listar todos</a></li>
+                <li><a href="gerenciar{{className}}.html">Buscar</a></li>
+              </ul>
+        
+              <ul id="nav-mobile" class="sidenav">
+                <li><a href="cria{{className}}.html">Cadastrar</a></li>
+                <li><a href="todos{{className}}.html">Listar todos</a></li>
+                <li><a href="gerenciar{{className}}.html">Buscar</a></li>
+              </ul>
+              <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            </div>
+          </nav>
+          <div class="section no-pad-bot" id="index-banner">
+            <div class="container">
+              <br><br>
+              <h4 class="header center orange-text">PHPCRUD-MVC-OOP-REST</h4>
+              <div class="row center">
+                <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
+              </div>
+              <div class="row center">
+               <h5 class="header col s12 light">fully customizable now </h5>
+                <div class="container">
+              Made by <a class="orange-text text-lighten-3" href="https://www.linkedin.com/in/faustinopsy/">Faustinopsy</a>
+              </div>
+              </div>
+              <br><br>
+            </div>
+          </div>
+          <div class="container">
+            <div class="section">
+              <!--   Icon Section   -->
+              <div class="row">
+                <div class="col s12 m4">
+                  <div class="icon-block">
+                    <h2 class="center light-blue-text"><i class="material-icons">flash_on</i></h2>
+                    <h5 class="center">Speeds up development</h5>
+        
+                    <p class="light">We did most of the heavy lifting for you to provide a default stylings that incorporate our custom components. Additionally, we refined animations and transitions to provide a smoother experience for developers.</p>
+                  </div>
+                </div>
+                <div class="col s12 m4">
+                  <div class="icon-block">
+                    <h2 class="center light-blue-text"><i class="material-icons">group</i></h2>
+                    <h5 class="center">User Experience Focused</h5>
+                    <p class="light">By utilizing elements and principles of Material Design, we were able to create a framework that incorporates components and animations that provide more feedback to users. Additionally, a single underlying responsive system across all platforms allow for a more unified user experience.</p>
+                  </div>
+                </div>
+                <div class="col s12 m4">
+                  <div class="icon-block">
+                    <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
+                    <h5 class="center">Easy to work with</h5>
+                    <p class="light">We have provided detailed documentation as well as specific code examples to help new users get started. We are also always open to feedback and can answer any questions a user may have about Materialize.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>
+          </div>
+          <footer class="page-footer light-green">
+            <div class="container">
+              <div class="row">
+                <div class="col l6 s12">
+                  <h5 class="white-text">Company Bio</h5>
+                  <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+                </div>
+                <div class="col l3 s12">
+                  <h5 class="white-text">Settings</h5>
+                  <ul>
+                    <li><a class="white-text" href="#!">Link 1</a></li>
+                    <li><a class="white-text" href="#!">Link 2</a></li>
+                    <li><a class="white-text" href="#!">Link 3</a></li>
+                    <li><a class="white-text" href="#!">Link 4</a></li>
+                  </ul>
+                </div>
+                <div class="col l3 s12">
+                  <h5 class="white-text">Connect</h5>
+                  <ul>
+                    <li><a class="white-text" href="#!">Link 1</a></li>
+                    <li><a class="white-text" href="#!">Link 2</a></li>
+                    <li><a class="white-text" href="#!">Link 3</a></li>
+                    <li><a class="white-text" href="#!">Link 4</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="footer-copyright">
+            </div>
+          </footer>
+          <!--  Scripts-->
+          <script src="js/jquery-2.1.1.min.js"></script>
+          <script src="js/materialize.min.js"></script>
+          <script src="js/init.js"></script>
+          </body>
+        </html>
     EOT;
     
     $generatedHtml = str_replace('{{className}}', $className, $htmlTemplate);
