@@ -20,6 +20,8 @@ if(!($_POST['db_host']) || !($_POST['db_name']) || !($_POST['db_user'] )
 
     } else {
 
+echo '<div id="app">';
+echo '<div class="form-card">';
 echo '<link href="css/stylecriador.css" rel="stylesheet"><form action="install.php" method="post">';
 echo '<label for="db_host">DB Host:</label>';
 echo '<input type="text" id="db_host" name="db_host" placeholder="localhost"><br><br>';
@@ -28,9 +30,11 @@ echo '<input type="text" id="db_name" name="db_name" placeholder="bancoXXYZ"><br
 echo '<label for="db_user">DB Nome do usuário do banco:</label>';
 echo '<input type="text" id="db_user" name="db_user" placeholder="root"><br><br>';
 echo '<label for="db_password">DB Senha do banco:</label>';
-echo '<input type="password" id="db_password" name="db_password" placeholder="admin123"><br><br>';
+echo '<input type="text" id="db_password" name="db_password" placeholder="admin123"><br><br>';
 echo '<input type="submit" value="Continuar" name="submit">';
 echo '</form>';
+echo '</div>';
+echo '</div>';
 }
 }
 

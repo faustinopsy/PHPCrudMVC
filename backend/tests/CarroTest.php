@@ -1,11 +1,11 @@
 <?php
 
-use App\Model\Aula;
+use App\Model\Carro;
 use PHPUnit\Framework\TestCase;
 
-class AulaTest extends TestCase {
+class CarroTest extends TestCase {
     public function testSetAndGet() {
-        $model = new Aula();
+        $model = new Carro();
        
     }
 

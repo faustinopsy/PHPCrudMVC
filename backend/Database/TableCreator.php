@@ -334,10 +334,6 @@ class TableCreator extends Connection{
             $jsCreateTemplate .= "              {$className}[element.name] = element.value;\n";
             $jsCreateTemplate .= "          }\n";
             $jsCreateTemplate .= "      }\n";
-            $jsCreateTemplate .= "      if (!{$className}.nome) {\n";
-            $jsCreateTemplate .= "          alert(\"Por favor, insira um nome!\");\n";
-            $jsCreateTemplate .= "          return;\n";
-            $jsCreateTemplate .= "      }\n";
             $jsCreateTemplate .= "      try {\n";
             $jsCreateTemplate .= "          const response = await  fetch('/backend/Routes/{$className}Route.php', { \n";
             $jsCreateTemplate .= "          method: 'POST',\n";
@@ -576,7 +572,7 @@ class TableCreator extends Connection{
         $htmlTemplate .= "<html lang=\"en\">\n";
         $htmlTemplate .= "<head>\n";
         $htmlTemplate .= "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n";
-        $htmlTemplate .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1.0\"/>\n";
+        $htmlTemplate .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>\n";
         $htmlTemplate .= "  <title>Starter Template - Materialize</title>\n";
         $htmlTemplate .= "  <!-- CSS  -->\n";
         $htmlTemplate .= "  <link href=\"css/materialize.css\" type=\"text/css\" rel=\"stylesheet\" media=\"screen,projection\"/>\n";
@@ -663,7 +659,7 @@ class TableCreator extends Connection{
         $htmlTemplate2 .= "<html lang=\"en\">\n";
         $htmlTemplate2 .= "<head>\n";
         $htmlTemplate2 .= "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n";
-        $htmlTemplate2 .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1.0\"/>\n";
+        $htmlTemplate2 .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>\n";
         $htmlTemplate2 .= "  <title>Starter Template - Materialize</title>\n";
         $htmlTemplate2 .= "  <!-- CSS  -->\n";
         $htmlTemplate2 .= "  <link href=\"css/materialize.css\" type=\"text/css\" rel=\"stylesheet\" media=\"screen,projection\"/>\n";
@@ -739,7 +735,7 @@ class TableCreator extends Connection{
         $htmlTemplate3 .= "<html lang=\"en\">\n";
         $htmlTemplate3 .= "<head>\n";
         $htmlTemplate3 .= "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n";
-        $htmlTemplate3 .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1.0\"/>\n";
+        $htmlTemplate3 .= "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>\n";
         $htmlTemplate3 .= "  <title>Starter Template - Materialize</title>\n";
         $htmlTemplate3 .= "  <!-- CSS  -->\n";
         $htmlTemplate3 .= "  <link href=\"css/materialize.css\" type=\"text/css\" rel=\"stylesheet\" media=\"screen,projection\"/>\n";
@@ -837,7 +833,7 @@ class TableCreator extends Connection{
         <html lang="en">
         <head>
           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1"/>
           <title>Starter Template - Materialize</title>
           <!-- CSS  -->
           <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
@@ -948,7 +944,6 @@ class TableCreator extends Connection{
      file_put_contents("index.html", $generatedHtml);
     }
     
-    
     private function createInsertProcedure($tableName, $columnNames, $placeholders) {
         $columnNamesWithoutId = array_filter($columnNames, function($colName) {
              return $colName ; 
@@ -1027,4 +1022,371 @@ class TableCreator extends Connection{
     
         $this->conn->exec($sql);
     }
+    public function createJsComponents($className, $properties) {
+        $this->createHtmlSPA();
+        $this->createJsCreateItem($className, $properties);
+        $this->createJsListItem($className, $properties);
+        $this->createJsSearchItem($className, $properties);
+        $this->createJsUpdateItemForm($className, $properties);
+        $this->createJsApp($className);
+    }
+    private function createHtmlSPA(){
+       
+        $generatedHtml = <<<EOT
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Gerenciador de Itens SPA</title>
+            <link rel="stylesheet" href="css/styles.css">
+        </head>
+        <body>
+            <header>
+                <nav>
+                    <ul>
+                        <li><a href="#" data-view="create">Criar Item</a></li>
+                        <li><a href="#" data-view="list">Listar Itens</a></li>
+                        <li><a href="#" data-view="search">Buscar por ID</a></li>
+                    </ul>
+                </nav>
+            </header>
+            <main id="app">
+            </main>
+            <footer>
+                <p>&copy; 2024 Gerenciador de Itens SPA</p>
+            </footer>
+            <script type="module" src="js/App.js"></script>
+        </body>
+        </html>
+        EOT;
+    
+        file_put_contents("index.html", $generatedHtml);
+    }
+    private function createJsListItem($className, $properties) {
+        $jsDir = "js/components";
+        if (!is_dir($jsDir)) {
+            mkdir($jsDir, 0777, true);
+        }
+    
+        $jsListItemTemplate = <<<EOT
+    import UpdateItemForm from './UpdateItemForm.js';
+    class ListItem {
+        constructor() {
+        }
+    
+        render() {
+            this.fetchItems()
+            return `
+                <button id="fetchItemsButton">Buscar Todos os Itens</button>
+                <div id="itemsList"></div>
+            `;
+        }
+    
+        afterRender() {
+            document.getElementById('fetchItemsButton').addEventListener('click', () => this.fetchItems());
+        }
+    
+        async fetchItems() {
+            const response = await fetch('/backend/Routes/{$className}Route.php');
+            const items = await response.json();
+            let itemsHtml = '<h2>Itens Disponíveis</h2><div class="panel">';
+            items.{$className}.forEach((item) => {
+                itemsHtml += `<div class="item" data-id="\${item.id}">
+                    \${item.id} - \${item.nome} - \${item.idade}
+                    <button class="delete-button" data-id="\${item.id}">Deletar</button></div>`;
+            });
+            itemsHtml += '</div>';
+            document.getElementById('itemsList').innerHTML = itemsHtml;
+    
+            items.{$className}.forEach((item) => {
+                document.querySelector(`.delete-button[data-id='\${item.id}']`).addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.deleteItem(item.id);
+                });
+                document.querySelector(`.item[data-id='\${item.id}']`).addEventListener('click', () => {
+                    this.openUpdateModal(item);
+                });
+            });
+        }
+    
+        async deleteItem(id) {
+            await fetch(`/backend/Routes/{$className}Route.php?id=\${id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+            });
+    
+            alert('Item deletado com sucesso.');
+            this.fetchItems();
+        }
+    
+        openUpdateModal(item) {
+            const updateForm = new UpdateItemForm(this.fetchService, () => this.fetchItems());
+            document.getElementById('app').innerHTML = updateForm.render();
+            updateForm.fillUpdateForm(item);
+            updateForm.afterRender();
+        }
+    }
+    
+    export default ListItem;
+    EOT;
+    
+        file_put_contents("$jsDir/ListItem.js", $jsListItemTemplate);
+    }
+    
+    private function createJsSearchItem($className, $properties) {
+        $jsDir = "js/components";
+        if (!is_dir($jsDir)) {
+            mkdir($jsDir, 0777, true);
+        }
+    
+        $jsSearchItemTemplate = <<<EOT
+    class SearchItem {
+        constructor() {
+        }
+    
+        render() {
+            return `
+                <form id="searchItemForm">
+                    ID: <input type="number" id="itemId"><br>
+                    <button type="submit">Buscar Item</button>
+                </form>
+                <div id="searchResult"></div>
+            `;
+        }
+    
+        afterRender() {
+            document.getElementById('searchItemForm').addEventListener('submit', (e) => this.searchItem(e));
+        }
+    
+        async searchItem(event) {
+            event.preventDefault();
+            const id = document.getElementById('itemId').value;
+    
+            const response = await fetch(`/backend/Routes/{$className}Route.php?id=\${id}`);
+            const item = await response.json();
+    
+            if (item) {
+                document.getElementById('searchResult').innerHTML = `
+                    <div>
+                        \${item.{$className}.id} - \${item.{$className}.nome} - \${item.{$className}.idade}
+                    </div>
+                `;
+            } else {
+                document.getElementById('searchResult').innerHTML = '<div>Item não encontrado</div>';
+            }
+        }
+    }
+    
+    export default SearchItem;
+    EOT;
+    
+        file_put_contents("$jsDir/SearchItem.js", $jsSearchItemTemplate);
+    }
+    
+    private function createJsUpdateItemForm($className, $properties) {
+        $jsDir = "js/components";
+        if (!is_dir($jsDir)) {
+            mkdir($jsDir, 0777, true);
+        }
+    
+        $formFields = '';
+        $formValues = '';
+        $fillValues = '';
+    
+        foreach ($properties as $property) {
+            $propName = $property['name'];
+            $formFields .= <<<HTML
+            <div class="input-field">
+                <label for="update{$propName}">{$propName}</label>
+                <input type="text" id="update{$propName}" class="validate">
+            </div>
+    HTML;
+            $formValues .= 'const ' . $propName . ' = document.getElementById("update' . $propName . '").value;' . "\n";
+            $fillValues .= 'document.getElementById("update' . $propName . '").value = item.' . $propName . ';' . "\n";
+        }
+    
+        $jsUpdateItemFormTemplate = <<<EOT
+    class UpdateItemForm {
+        constructor(renderCallback) {
+            this.renderApp = renderCallback;
+        }
+    
+        render() {
+            return `
+            <div id="updateItemModal" class="modal">
+            <div class="modal-content"><div class="close"> X </div>
+                <h4>Atualizar Item</h4>
+                <div class="input-field">
+                    <label for="updateId">ID para atualizar</label>
+                    <input type="text" id="updateId" class="validate">
+                </div>
+                {$formFields}
+                <div class="modal-footer">
+                    <button id="updateButton" class="btn">Atualizar Item</button>
+                </div>
+            </div>
+        </div>
+            `;
+        }
+    
+        closeModal() {
+            const modal = document.getElementById('updateItemModal');
+            modal.style.display = 'none';
+        }
+    
+        afterRender() {
+            document.getElementById('updateButton').addEventListener('click', () => this.updateItem());
+            document.querySelector('.close').addEventListener('click', () => this.closeModal());
+        }
+    
+        async updateItem() {
+            {$formValues}
+    
+            await fetch(`/backend/Routes/{$className}Route.php?id=\${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, nome, idade }),
+            });
+    
+            alert('Item atualizado com sucesso.');
+            this.renderApp();
+        }
+    
+        fillUpdateForm(item) {
+            {$fillValues}
+        }
+    }
+    
+    export default UpdateItemForm;
+    EOT;
+    
+        file_put_contents("$jsDir/UpdateItemForm.js", $jsUpdateItemFormTemplate);
+    }
+    
+    
+    public function createJsCreateItem($className, $properties) {
+        $jsDir = "js/components";
+        if (!is_dir($jsDir)) {
+            mkdir($jsDir, 0777, true);
+        }
+    
+        $formFields = '';
+        $formValues = '';
+        $fieldChecks = '';
+        $fieldJson = '';
+    
+        foreach ($properties as $property) {
+            $propName = $property['name'];
+            $formFields .= ucfirst($propName) . ': <input type="text" id="' . $propName . '"><br>' . "\n";
+            $formValues .= 'const ' . $propName . ' = document.getElementById("' . $propName . '").value;' . "\n";
+            $fieldChecks .= 'if (!' . $propName . ') { alert("' . ucfirst($propName) . ' é obrigatório."); return; }' . "\n";
+            $fieldJson .= $propName . ': ' . $propName . ', ';
+        }
+    
+        $fieldJson = rtrim($fieldJson, ', ');
+    
+        $jsCreateTemplate = <<<EOT
+    class CreateItem {
+        constructor() {
+        }
+    
+        render() {
+            return `
+                <form id="addItemForm">
+                    {$formFields}
+                    <button type="submit">Adicionar Item</button>
+                </form>
+            `;
+        }
+    
+        afterRender() {
+            document.getElementById('addItemForm').addEventListener('submit', (e) => this.addItem(e));
+        }
+    
+        async addItem(event) {
+            event.preventDefault();
+            {$formValues}
+    
+            {$fieldChecks}
+    
+            await fetch('/backend/Routes/{$className}Route.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ {$fieldJson} }),
+            });
+    
+            alert('Item adicionado com sucesso.');
+        }
+    }
+    
+    export default CreateItem;
+    EOT;
+    
+        file_put_contents("$jsDir/CreateItem.js", $jsCreateTemplate);
+    }
+    
+    private function createJsApp($className) {
+        $jsDir = "js";
+        if (!is_dir($jsDir)) {
+            mkdir($jsDir, 0777, true);
+        }
+    
+        $jsAppTemplate = <<<EOT
+    import CreateItem from './components/CreateItem.js';
+    import ListItem from './components/ListItem.js';
+    import SearchItem from './components/SearchItem.js';
+    import UpdateItemForm from './components/UpdateItemForm.js';
+    
+    class App {
+        constructor(apiBaseUrl) {
+            this.apiBaseUrl = apiBaseUrl;
+            this.appElement = document.getElementById('app');
+            this.initApp();
+        }
+    
+        initApp() {
+            this.createItem = new CreateItem();
+            this.listItem = new ListItem();
+            this.searchItem = new SearchItem();
+            
+            document.querySelectorAll('nav a').forEach(navLink => {
+                navLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.navigate(e.target.dataset.view);
+                });
+            });
+    
+            this.navigate('create');
+        }
+    
+        navigate(view) {
+            switch(view) {
+                case 'create':
+                    this.render(this.createItem.render());
+                    this.createItem.afterRender();
+                    break;
+                case 'list':
+                    this.render(this.listItem.render());
+                    this.listItem.afterRender();
+                    break;
+                case 'search':
+                    this.render(this.searchItem.render());
+                    this.searchItem.afterRender();
+                    break;
+            }
+        }
+    
+        render(html) {
+            this.appElement.innerHTML = html;
+        }
+    }
+    
+    const apiBaseUrl = location.host; 
+    const itemManager = new App(apiBaseUrl);
+    EOT;
+    
+        file_put_contents("$jsDir/App.js", $jsAppTemplate);
+    }
+    
 }

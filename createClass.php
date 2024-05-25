@@ -72,9 +72,13 @@ try {
         $make->createTableFromModel($classeMigrate);
         $make->createTests($classeMigrate);
         $make->createRoute($classeMigrate);
-        $make->createJsClasses($className, $properties);
-        $make->createHtmlForm($className, $properties);
-        $make->createHtmlTemplate($className);
+        if(isset($data['spa']) && $data['spa'] === 'true'){
+            $make->createJsComponents($className, $properties);
+        }else{
+            $make->createJsClasses($className, $properties);
+            $make->createHtmlForm($className, $properties);
+            $make->createHtmlTemplate($className);
+        }
         
         echo json_encode(['success' => true]);
 

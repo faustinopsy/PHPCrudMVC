@@ -1,6 +1,6 @@
 <?php
 
-if (file_exists('index.html')) {
+if (!file_exists('index.html')) {
     header('Location: install.php');
     exit;
 } else {

@@ -1,16 +1,16 @@
 <?php
 
-use App\Controller\EnderecoController;
-use App\Model\Endereco;
+use App\Controller\CarroController;
+use App\Model\Carro;
 use PHPUnit\Framework\TestCase;
 
-class EnderecoControllerTest extends TestCase {
+class CarroControllerTest extends TestCase {
     protected $controller;
     protected $model;
 
     protected function setUp(): void {
-        $this->model = new Endereco();
-        $this->controller = new EnderecoController($this->model);
+        $this->model = new Carro();
+        $this->controller = new CarroController($this->model);
     }
 
     public function testInsert() {
