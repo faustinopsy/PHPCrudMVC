@@ -1043,6 +1043,10 @@ class TableCreator extends Connection{
         </head>
         <body>
             <header>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" stroke="white" stroke-width="5" fill="none" />
+            <text x="50" y="55" font-size="25" text-anchor="middle" fill="white">Logo</text>
+            </svg>
                 <nav>
                     <ul>
                         <li><a href="#" data-view="create">Criar Item</a></li>
@@ -1063,20 +1067,27 @@ class TableCreator extends Connection{
     
         file_put_contents("index.html", $generatedHtml);
     }
+
     private function createJsListItem($className, $properties) {
         $jsDir = "js/components";
         if (!is_dir($jsDir)) {
             mkdir($jsDir, 0777, true);
         }
     
+        $itemFields = '';
+        foreach ($properties as $property) {
+            $propName = $property['name'];
+            $itemFields .= '${item.' . $propName . '} - ';
+        }
+        $itemFields = rtrim($itemFields, ' - ');
+    
         $jsListItemTemplate = <<<EOT
     import UpdateItemForm from './UpdateItemForm.js';
     class ListItem {
-        constructor() {
-        }
+        constructor() {}
     
         render() {
-            this.fetchItems()
+            this.fetchItems();
             return `
                 <button id="fetchItemsButton">Buscar Todos os Itens</button>
                 <div id="itemsList"></div>
@@ -1093,7 +1104,7 @@ class TableCreator extends Connection{
             let itemsHtml = '<h2>Itens Disponíveis</h2><div class="panel">';
             items.{$className}.forEach((item) => {
                 itemsHtml += `<div class="item" data-id="\${item.id}">
-                    \${item.id} - \${item.nome} - \${item.idade}
+                    {$itemFields}
                     <button class="delete-button" data-id="\${item.id}">Deletar</button></div>`;
             });
             itemsHtml += '</div>';
@@ -1121,7 +1132,7 @@ class TableCreator extends Connection{
         }
     
         openUpdateModal(item) {
-            const updateForm = new UpdateItemForm(this.fetchService, () => this.fetchItems());
+            const updateForm = new UpdateItemForm(() => this.fetchItems());
             document.getElementById('app').innerHTML = updateForm.render();
             updateForm.fillUpdateForm(item);
             updateForm.afterRender();
@@ -1134,16 +1145,23 @@ class TableCreator extends Connection{
         file_put_contents("$jsDir/ListItem.js", $jsListItemTemplate);
     }
     
+    
     private function createJsSearchItem($className, $properties) {
         $jsDir = "js/components";
         if (!is_dir($jsDir)) {
             mkdir($jsDir, 0777, true);
         }
     
+        $itemFields = '';
+        foreach ($properties as $property) {
+            $propName = $property['name'];
+            $itemFields .= '${item.' . $className . '.' . $propName . '} - ';
+        }
+        $itemFields = rtrim($itemFields, ' - ');
+    
         $jsSearchItemTemplate = <<<EOT
     class SearchItem {
-        constructor() {
-        }
+        constructor() {}
     
         render() {
             return `
@@ -1169,7 +1187,7 @@ class TableCreator extends Connection{
             if (item) {
                 document.getElementById('searchResult').innerHTML = `
                     <div>
-                        \${item.{$className}.id} - \${item.{$className}.nome} - \${item.{$className}.idade}
+                        {$itemFields}
                     </div>
                 `;
             } else {
@@ -1184,6 +1202,7 @@ class TableCreator extends Connection{
         file_put_contents("$jsDir/SearchItem.js", $jsSearchItemTemplate);
     }
     
+    
     private function createJsUpdateItemForm($className, $properties) {
         $jsDir = "js/components";
         if (!is_dir($jsDir)) {
@@ -1193,6 +1212,7 @@ class TableCreator extends Connection{
         $formFields = '';
         $formValues = '';
         $fillValues = '';
+        $fieldJson = '';
     
         foreach ($properties as $property) {
             $propName = $property['name'];
@@ -1204,7 +1224,10 @@ class TableCreator extends Connection{
     HTML;
             $formValues .= 'const ' . $propName . ' = document.getElementById("update' . $propName . '").value;' . "\n";
             $fillValues .= 'document.getElementById("update' . $propName . '").value = item.' . $propName . ';' . "\n";
+            $fieldJson .= $propName . ': ' . $propName . ', ';
         }
+    
+        $fieldJson = rtrim($fieldJson, ', ');
     
         $jsUpdateItemFormTemplate = <<<EOT
     class UpdateItemForm {
@@ -1246,7 +1269,7 @@ class TableCreator extends Connection{
             await fetch(`/backend/Routes/{$className}Route.php?id=\${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, nome, idade }),
+                body: JSON.stringify({ id, {$fieldJson} }),
             });
     
             alert('Item atualizado com sucesso.');
@@ -1254,6 +1277,7 @@ class TableCreator extends Connection{
         }
     
         fillUpdateForm(item) {
+            document.getElementById('updateId').value = item.id;
             {$fillValues}
         }
     }
@@ -1263,6 +1287,7 @@ class TableCreator extends Connection{
     
         file_put_contents("$jsDir/UpdateItemForm.js", $jsUpdateItemFormTemplate);
     }
+    
     
     
     public function createJsCreateItem($className, $properties) {
