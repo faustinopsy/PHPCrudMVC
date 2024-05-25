@@ -19,7 +19,7 @@
         <div class="toggle-container">
             <label class="toggle-label">
                 Criar SPA:
-                <input type="checkbox" id="isSPA" name="isSPA" class="toggle-checkbox">
+                <input type="checkbox" id="isSPA" name="isSPA" class="toggle-checkbox" checked >
                 <div class="toggle-switch"></div>
             </label>
         </div>
@@ -64,13 +64,11 @@
             `;
         }
     });
-
     document.getElementById('classForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
-
         formData.append('spa', document.getElementById('isSPA').checked);
-
+        formData.append('tipo',location.hash);
         fetch('createClass.php', {
             method: 'POST',
             body: formData
@@ -83,6 +81,7 @@
                 '',
                 'success'
             );
+            location.href = 'index.html'
         })
         .catch((error) => {
             console.error('Error:', error);

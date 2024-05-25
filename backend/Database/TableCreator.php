@@ -31,7 +31,7 @@ class TableCreator extends Connection{
         }
     }
     
-    public function createTableFromModel($model) {
+    public function createTableFromModel($model, $tipo) {
         try{
             $reflection = new ReflectionClass($model);
             $properties = $reflection->getProperties(ReflectionProperty::IS_PRIVATE);
@@ -49,19 +49,25 @@ class TableCreator extends Connection{
             }
     
         $tableName = str_replace('App','',str_replace('Model','',str_replace('\\','',$reflection->getName())));
-
         $columnsSql = implode(', ', $columns);
-        $createTableSql = "CREATE TABLE IF NOT EXISTS {$tableName} (".str_replace('id INT,','id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,',$columnsSql).")";
+        $createTableSql ='';
+        if ($tipo === '#lite') {
+            $createTableSql = "CREATE TABLE IF NOT EXISTS {$tableName} (".str_replace('id INT,','id INTEGER PRIMARY KEY AUTOINCREMENT ,',$columnsSql).")";
+        } elseif ($tipo === 'mysql') {
+            $createTableSql = "CREATE TABLE IF NOT EXISTS {$tableName} (".str_replace('id INT,','id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,',$columnsSql).")";
+        }
         $stmt = $this->conn->prepare($createTableSql);
         $stmt->execute();
-    
+
         $placeholders = array_map(function($colName) { return ":{$colName}"; }, $columnNames);
 
-        $this->createInsertProcedure($tableName, $columnNames, $columns);
-        $this->createUpdateProcedure($tableName, $columns);
-        $this->createDeleteProcedure($tableName);
-        $this->createSelectAllProcedure($tableName);
-        $this->createSelectByIdProcedure($tableName);
+        if ($tipo !== '#lite') {
+            $this->createInsertProcedure($tableName, $columnNames, $columns);
+            $this->createUpdateProcedure($tableName, $columns);
+            $this->createDeleteProcedure($tableName);
+            $this->createSelectAllProcedure($tableName);
+            $this->createSelectByIdProcedure($tableName);
+        }
         return true;
     } catch (ReflectionException $e) {
         echo "Erro de Reflexão: " . $e->getMessage();
@@ -1040,6 +1046,7 @@ class TableCreator extends Connection{
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Gerenciador de Itens SPA</title>
             <link rel="stylesheet" href="css/styles.css">
+            <link rel="stylesheet" href="css/sweetalert2.min.css">
         </head>
         <body>
             <header>
@@ -1061,6 +1068,7 @@ class TableCreator extends Connection{
                 <p>&copy; 2024 Gerenciador de Itens SPA</p>
             </footer>
             <script type="module" src="js/App.js"></script>
+            <script src="js/sweetalert2.all.min.js"></script>
         </body>
         </html>
         EOT;
@@ -1127,13 +1135,17 @@ class TableCreator extends Connection{
                 headers: { 'Content-Type': 'application/json' },
             });
     
-            alert('Item deletado com sucesso.');
+            Swal.fire(
+                'Deletado com sucesso',
+                '',
+            'success'
+             )
             this.fetchItems();
         }
     
         openUpdateModal(item) {
             const updateForm = new UpdateItemForm(() => this.fetchItems());
-            document.getElementById('app').innerHTML = updateForm.render();
+            document.body.appendChild(updateForm.render());
             updateForm.fillUpdateForm(item);
             updateForm.afterRender();
         }
@@ -1219,7 +1231,7 @@ class TableCreator extends Connection{
             $formFields .= <<<HTML
             <div class="input-field">
                 <label for="update{$propName}">{$propName}</label>
-                <input type="text" id="update{$propName}" class="validate">
+                <input type="{$property['type']}" id="update{$propName}" class="validate">
             </div>
     HTML;
             $formValues .= 'const ' . $propName . ' = document.getElementById("update' . $propName . '").value;' . "\n";
@@ -1236,7 +1248,9 @@ class TableCreator extends Connection{
         }
     
         render() {
-            return `
+            const container = document.createElement('div')
+            container.id = 'mod'
+            container.innerHTML =  `
             <div id="updateItemModal" class="modal">
             <div class="modal-content"><div class="close"> X </div>
                 <h4>Atualizar Item</h4>
@@ -1251,11 +1265,12 @@ class TableCreator extends Connection{
             </div>
         </div>
             `;
+            return container
         }
     
         closeModal() {
-            const modal = document.getElementById('updateItemModal');
-            modal.style.display = 'none';
+            const modal = document.getElementById('mod');
+            document.body.removeChild(modal)
         }
     
         afterRender() {
@@ -1272,7 +1287,11 @@ class TableCreator extends Connection{
                 body: JSON.stringify({ id, {$fieldJson} }),
             });
     
-            alert('Item atualizado com sucesso.');
+            Swal.fire(
+                'Atualizado com sucesso',
+                '',
+            'success'
+             )
             this.renderApp();
         }
     
@@ -1302,15 +1321,18 @@ class TableCreator extends Connection{
         $fieldJson = '';
     
         foreach ($properties as $property) {
+            if ($property['name'] === 'id') {
+                continue; 
+            }
             $propName = $property['name'];
             $formFields .= ucfirst($propName) . ': <input type="text" id="' . $propName . '"><br>' . "\n";
             $formValues .= 'const ' . $propName . ' = document.getElementById("' . $propName . '").value;' . "\n";
-            $fieldChecks .= 'if (!' . $propName . ') { alert("' . ucfirst($propName) . ' é obrigatório."); return; }' . "\n";
+           
             $fieldJson .= $propName . ': ' . $propName . ', ';
         }
     
         $fieldJson = rtrim($fieldJson, ', ');
-    
+        
         $jsCreateTemplate = <<<EOT
     class CreateItem {
         constructor() {
@@ -1341,7 +1363,18 @@ class TableCreator extends Connection{
                 body: JSON.stringify({ {$fieldJson} }),
             });
     
-            alert('Item adicionado com sucesso.');
+            Swal.fire(
+                'adicionado com sucesso',
+                '',
+            'success'
+             )
+             const form = document.getElementById('addItemForm')
+            for (let i = 0; i < form.elements.length; i++) {
+                const element = form.elements[i];
+                if (element.id) {
+                    element.value='';
+                }
+            }
         }
     }
     
@@ -1382,7 +1415,7 @@ class TableCreator extends Connection{
                 });
             });
     
-            this.navigate('create');
+            this.navigate('list');
         }
     
         navigate(view) {

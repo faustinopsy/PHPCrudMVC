@@ -11,18 +11,21 @@ use PDOException;
     private $password;
     protected $conn;
     private $db_type;
-    public function __construct() {
-        $configFilePath = __DIR__ . '/config.php';
-        $config = require $configFilePath;
+public function __construct() {
+    $configFilePath = __DIR__ . '/config.php';
+    $config = require $configFilePath;
+    $this->db_type = DB_TYPE;
+    
+    if ($this->db_type == 'mysql') {
         $this->host = DB_HOST;
         $this->db_name = DB_NAME;
         $this->username = DB_USER;
         $this->password = DB_PASSWORD;
-        $this->db_type = DB_TYPE;
-        
-        $this->connect();
     }
- public function connect() {
+    
+    $this->connect();
+}
+public function connect() {
   try {
     switch ($this->db_type) {
         case "mysql":
@@ -32,8 +35,8 @@ use PDOException;
             $dsn = "pgsql:host=" . $this->host . ";dbname=" . $this->db_name;
             break;
         case "sqlite":
-            $dsn = "sqlite:". __DIR__ . "/../sqlite/test_drive.db";
-            $filepath = __DIR__ . "/../sqlite/test_drive.db";
+            $dsn = "sqlite:". __DIR__ . "/Database.db";
+            $filepath = __DIR__ . "/Database.db";
             if (!file_exists($filepath)) {
                 die("Arquivo não encontrado: $filepath");
             }
