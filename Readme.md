@@ -1,7 +1,8 @@
 # PHPCrudMVC
 
 ## Descrição
-PHPCrudMVC 5.1.0 (Atualizado 20-10-2023 layout materializecss) é um pequeno e simplificado framework PHP, projetado para fornecer funcionalidades básicas e essenciais para o desenvolvimento de aplicações web. Ele oferece uma estrutura básica para operações CRUD (Create, Read, Update, Delete) e gerenciamento de conexões com banco de dados, permitindo que os desenvolvedores se concentrem na lógica de negócios específica de suas aplicações.
+PHPCrudMVC 6.1.0 (Atualizado 25-05-2024 opção de conectar e criar o banco Sqlite e opção de criar o frontend no padrão SPA.
+O Projeto é um pequeno e simplificado framework PHP, projetado para fornecer funcionalidades básicas e essenciais para o desenvolvimento de aplicações web. Ele oferece uma estrutura básica para operações CRUD (Create, Read, Update, Delete) e gerenciamento de conexões com banco de dados, permitindo que os desenvolvedores se concentrem na lógica de negócios específica de suas aplicações.
 Este MicroFramework visa trazer facilidades que um grande framework tem, porém indo direto ao ponto usando PHP puro com PSR-4 sem esconder como as coisas funcionam, este modelo é então idealizado para estudante de programação que queiram entender os fluxos de dados que envolve uma aplicação real.
 Com a estrutura MVC e uma capacidade de comunicação REST, onde o frontend é independente do backend, ambos trabalham separados e se comunicam no padrão API REST.
 
@@ -29,8 +30,18 @@ Após a configuração inicial do banco de dados, o `install.php` (lembre-se de 
 
 - **Frontend**:será criado na raiz os htmls responsáveis chamar as requisições por meios dos arquivos javascipt correspondentes que são criados também.
 
-### Geração de Classes JavaScript e Formulários HTML
+## Geração de Classes JavaScript e Formulários HTML
 Foi descontinuado a criação de javascript e formulários html, mas na raiz encontra-se modelos para realizar uma cópia e reproduzir para as classes correspondentes, e ajustar o caminho para a rota especifica
+
+### SPA (Single Page Application)
+A adição do suporte a SPA no PHPCrudMVC permite criar aplicações web onde todas as interações do usuário ocorrem em uma única página, melhorando a experiência do usuário ao eliminar recarregamentos de página e permitindo transições mais rápidas e fluidas entre diferentes estados da aplicação.
+
+### Vantagens do SPA
+Performance: Reduz o tempo de carregamento ao minimizar a quantidade de dados transferidos entre o servidor e o cliente.
+Experiência do Usuário: Proporciona uma navegação mais rápida e fluida.
+Desenvolvimento: Facilita o gerenciamento de estados complexos da aplicação e a reutilização de componentes.
+Ao criar uma nova classe no PHPCrudMVC, você pode optar por gerar o frontend como uma SPA, aproveitando todas essas vantagens para desenvolver aplicações modernas e eficientes.
+
 
 ## Testes Automatizados
 Os testes para as classes modelo e controladores também são gerados automaticamente, garantindo que as operações básicas de CRUD funcionem conforme esperado. Os testes são salvos no diretório `backend/tests` e podem ser executados usando PHPUnit para validar a lógica de negócios e operações de banco de dados.
@@ -66,6 +77,7 @@ UserController é uma classe exemplo que estende Crud, oferecendo funcionalidade
 PHP >= 8.2
 Composer
 MySQL (ou outro SGBD compatível com PDO)
+SQlite (veja se a extensão está habilitada no php.ini)
 ```
 ## Testes
 O MicroFramework agora vem com testes unitários, garantindo que as funcionalidades principais estejam funcionando conforme esperado e facilitando a identificação e correção de bugs durante o desenvolvimento. Os testes foram escritos utilizando PHPUnit e cobrem operações básicas de CRUD.
