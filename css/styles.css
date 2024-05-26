@@ -1,78 +1,240 @@
 body {
-    background-image: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url("brasil.webp");
+    background-size: cover;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    color: #fff;
+}
+
+header {
+    background-color: #333;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    height: 100vh;
+}
+ul{
+    display: flex;
+    gap: 30px;
+    margin: 20px;
+    list-style: none;
+}
+div{
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-direction: column;
+}
+header svg {
+    width: 50px;
+    height: 50px;
+}
+
+header nav {
+    display: flex;
+    gap: 15px;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #444;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+header nav a:hover {
+    background-color: #555;
+}
+
+.main-container {
+    display: flex;
+    flex: 1;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    background-color: #444;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: #555;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+h1, h2, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form label {
+    font-size: 1.2em;
+}
+
+form input, form select, form button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+form button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+.items-list, .item-card {
+    margin-top: 20px;
+}
+.item{
+    margin-top: 20px;
+    background-color: #89af4c57;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.item-card button {
+    background-color: #dc3545;
+}
+
+.item-card button:hover {
+    background-color: #c82333;
+}
+
+footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+.panel, #addItemForm, #searchItemForm, #searchResult {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #0b467300;
+    backdrop-filter: blur(25px);
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.item {
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+button{
+    border-radius: 0 20px 0 20px;
+    padding: 5px 5px;
+    cursor: pointer;
+}
+.delete-button {
+    background-color: #ff4a4a;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #ff1a1a;
+}
+
+.modal {
+    
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(25px);
+    border: solid 2x blueviolet;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #d22b15b6;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #f6a000;
+    width: 50%;
+    border-radius: 0 20px 0 20px;
+}
+
+body.modal-open {
     overflow: hidden;
 }
-
-.card {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.close{
+    position: absolute;
+    left: 10px;
+    cursor: pointer;
 }
 
-button, a {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 5px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+#updateButton{
+    background-color: #15d2a9b6;
 }
-.card {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 20px;
-    width: 400px; /* Ajuste a largura conforme necessário */
-    backdrop-filter: blur(5px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px; /* Espaço entre os elementos dentro do cartão */
-}
-
-textarea {
-    width: 100%; /* Ocupa toda a largura do cartão */
-    height: 150px; /* Ajuste a altura conforme necessário */
-    resize: none; /* Evita que o usuário redimensione a área de texto */
-    border-radius: 5px;
-    padding: 10px;
-}
-
-div {
-    display: flex; /* Coloca os elementos lado a lado */
-    gap: 10px; /* Espaço entre o input e o botão */
-    width: 100%; /* Ocupa toda a largura do cartão */
-}
-
-input {
-    flex: 1; /* Ocupa todo o espaço disponível */
-    padding: 10px;
-    border-radius: 5px;
-}
-
-button {
-    padding: 10px;
-    border-radius: 5px;
-}
-a {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 5px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
+input[type=text],[type=number] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
